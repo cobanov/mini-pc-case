@@ -1,7 +1,6 @@
 name = "pccase"
 compatibility_date = "2026-10-01"
+routes = [{ pattern = "pccase.cobanov.dev", custom_domain = true }]
 
 [assets]
 directory = "docs"
-
-routes = [{ pattern = "pccase.cobanov.dev", custom_domain = true }]
