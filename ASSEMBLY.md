@@ -9,12 +9,15 @@ tabs +11 mm), ~9.7 L. Body split in two at Z = 80 mm; tallest part 178 mm.
 |---|---|---|
 | `body_lower` | floor + bottom intake fan, GPU opening + bracket shelf, B/R and C/H standoffs, foot and PSU-support bosses, lower front panel frame | 102 mm |
 | `body_upper` | I/O opening, F/J standoffs, PSU screws/grille/socket, control strip frame, Steam plate magnet pockets, CPU backplate grille | 178 mm |
+| `body_upper_mesh` | same, but the plate area is a hex mesh cut into the front wall: no faceplate, no magnets | 178 mm |
+| `body_upper_panel` | same, but with a screwed 156 × 126.1 panel frame (recess, 4 inserts) instead of the plate mount; takes `front_upper` | 178 mm |
 | `lid` | top cover, exhaust fan grille | 7 mm |
 | `foot` × 4 | Ø22 × 12 mm, M3 into the floor | 12 mm |
 | `psu_support` | removable PSU support: two columns + rail, 2 × M3 into floor bosses; the floor carries a 0.8 mm outline of its footprint | 24 mm (on its side) |
 | `front_lower` (+ `_plain`, `_mesh`) | lower front panel 156 × 72: default 3.5" LCD window 75 × 46 (module 85 × 55 × 5 behind it), plain, mesh | 3 mm |
 | `faceplate` (+ `_plain`, `_screen`) | **Steam Machine faceplate** 156 × 126.1 × 6.5 with 4 magnets: default mesh; plain (for veneer/paint), screen. Valve's and third-party plates fit too | 6.5 mm |
-| `strip` (+ `_plain`) | control strip 156 × 32 above the Steam plate: MX power in the centre, MX reset + USB-C left, 2 × USB-A right (panel-mount extensions) | 3 mm |
+| `front_upper` (+ `_plain`, `_screen`, `_fan`) | screwed upper front panel 156 × 126.1 for `body_upper_panel`: default mesh, plain (your own design), screen window, 120 mm fan | 3 mm |
+| `strip` (+ `_switches`, `_plain`) | control strip 156 × 32 above the upper front: MX power in the centre, MX reset + USB-C left, 2 × USB-A right (panel-mount extensions); `_switches` has power and reset only | 3 mm |
 | `side_lower`, `side_upper` | left side covers; the lower one is closed and carries the SSD bed on its inside (4 screws, 1.5 mm spacers) | 2.2 mm |
 | `test_piece` | rear-right corner: I/O opening, GPU opening + shelf, two standoffs | 133 mm |
 
@@ -34,7 +37,7 @@ All M3, one insert type: Ø4.3 × 6 mm pocket, M3 × 5 × 4.5 brass heat-set ins
 | PSU support (2), from above through the rail | 2 | M3 × 8 countersunk |
 | SSD, through the lower side cover into the SSD's bottom threads (4) | — | M3 × 6 countersunk |
 | Panels: lower front 4, control strip 4 | 8 | M3 × 8 countersunk (plate 3.25 mm with pad) |
-| Steam plate | — | 8 × K&J SB443-OUT (6.35 × 6.35 × 4.76 blocks; 4 in the case, 4 in the plate, glued) |
+| Steam plate | — | 8 × neodymium bar magnets 20 × 10 × 2 mm (e.g. SmilesWishes 20x10x2; 4 glued in the case pockets, 4 on the plate's bosses) |
 | PSU (4) | — | 6-32 UNC × 6 (comes with the PSU) |
 | **Total** | **37 inserts** | M3×6: 8 · M3×8 pan: 4 · M3×8 countersunk: 22 · M3×10 countersunk: 3 · M3×12 countersunk: 2 |
 
@@ -53,7 +56,7 @@ extensions (cutouts 9.6 × 3.9 and 13.6 × 6.4; drill the flange holes to match 
 2 × 120 × 25 mm Molex fans (intake in the floor, exhaust in the lid: chimney layout; the fans' own screws, Ø4.5 holes,
 105 mm pitch). Molex means no motherboard header is needed.
 
-Walls 2.2 mm (3 perimeters), lid 3 mm; total 762 cm³: 660 cm³ without the Steam plate ≈ 840 g PETG, mesh plate at 20 %
+Walls 2.2 mm (3 perimeters), lid 3 mm; total 766 cm³: 663 cm³ without the Steam plate ≈ 845 g PETG, mesh plate at 20 %
 infill ≈ 65 g → everything fits on one 1 kg spool (with a small margin).
 For a wood look glue 0.6 mm walnut veneer onto the plain plate, or print the plate in wood-filled PLA.
 PSU 150 × 86 × 140 (the user's PSU is 149.7 × 86.4 × 140); on its rear face the socket is bottom centre, the switch
@@ -69,17 +72,24 @@ as proud of the surface as you like.
 | Panel | Plate (outer) | Opening | Screw centres (from the plate corner) |
 |---|---|---|---|
 | Lower front | 156 × 72 | 128 × 48 | 6 × 6 mm inset |
+| Upper front (`body_upper_panel`) | 156 × 126.1 | 132 × 100.1 | 6 × 6 mm inset |
 | Control strip | 156 × 32 | 128 × 18 | 6 × 6 mm inset (two per end, 20 mm apart) |
 
-**Upper front = Steam Machine faceplate** (from Valve's official `steam_machine_3d.stp`, CC BY-NC-SA):
+**Upper front, three upper bodies to choose from:** `body_upper` carries the Steam Machine plate mount below, `body_upper_mesh`
+has a hex mesh in the wall and no panel at all, `body_upper_panel` takes the screwed `front_upper` panel (same rule as above;
+the two front joint screws sit under its plate, flush with the recess floor). Print one of the three.
+
+**Steam Machine faceplate (`body_upper`)** (from Valve's official `steam_machine_3d.stp`, CC BY-NC-SA):
 156 × 126.1 mm, 6.5 mm thick, flat or slightly convex front; no recess, the plate sits on the outer face of the
-front wall. On its back, 4 SB443-OUT magnets at (±67, ±52.5) mm from the plate centre protrude 4 mm from the plate
-(glued into a 0.8 mm pocket). The case has 6.65 mm square pockets at the same positions: the plate's magnet enters
-4 mm, the case's magnet sits behind it (glue them so the poles attract). Case opening 112 × 82 (6 mm from the pockets).
-Valve's stock plate, the Inkterface e-ink plate and third-party Steam Machine plates fit as well.
+front wall. Magnet positions (±67, ±52.5) mm from the plate centre are Valve's; the magnets are common
+**20 × 10 × 2 mm neodymium bars**. The printed plate has a 20 × 10 × 1.5 mm boss at each position with a bar glued on
+its tip (3.5 mm proud of the back). The case has a 20.6 × 10.6 mm pocket through the wall at each position, 4 mm deep
+to the second bar glued at its back, so the two magnets touch (glue them so the poles attract). Case opening 112 × 82.
+Valve's stock plate, the Inkterface plate and third-party Steam Machine plates attach too: their 6.35 mm bosses enter
+the same pockets and reach the bars, but are located loosely (the pocket is wider than the boss).
 
 Space behind: 8 mm on the lower front panel (GPU), 50 mm behind the Steam plate (to the cooler), 40 mm on the strip.
-The front joint screws of the body sit behind the Steam plate (Z 95): reachable with the plate off, invisible with it on.
+The front joint screws of the body sit behind the Steam plate (x 40 and 132, Z 95): reachable with the plate off, invisible with it on.
 Screwed panels carry Ø8 × 2 mm pads at the screw corners for the countersunk heads; the case has matching Ø8.6 pockets.
 
 ## Mating features (clearance 0.4 mm, PETG)
@@ -115,7 +125,7 @@ GPU and socket openings with pliers after printing and sand the edge.
 
 ## Assembly order
 
-1. Seat the inserts with a soldering iron (lower body 18, upper body 11, plus 8 in the panel frames).
+1. Seat the inserts with a soldering iron (lower body 18, upper body 11; `body_upper_panel` has 4 more for its panel).
 2. Screw the 4 feet to the floor.
 3. Lower side cover: mount the SSD on the bed on its inside with 4 screws (connector towards the front). Lower body:
    mount the intake fan in the floor (air in) and screw the PSU support onto its two floor bosses.

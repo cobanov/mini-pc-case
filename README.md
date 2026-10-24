@@ -14,10 +14,12 @@ front panels, recolor the parts, and toggle a Steam Machine and an iPhone 18 Pro
 - **Fits a 220 mm bed.** The body splits at Z = 80 mm into two upright prints (tallest part 178 mm),
   joined by an inner lip, two alignment pegs and four M3 screws. Every opening stays within one part.
 - **Steam Machine compatible front plate.** The upper front is a 156 × 126.1 × 6.5 mm plate held by four
-  K&J SB443 magnets at the positions taken from Valve's official `steam_machine_3d.stp`, so stock, Inkterface
-  and third party Steam Machine faceplates fit this case, and plates printed from this repo fit a Steam Machine.
+  magnets at the positions taken from Valve's official `steam_machine_3d.stp`, using common 20 × 10 × 2 mm neodymium
+  bars. Stock, Inkterface and third party Steam Machine faceplates attach to this case as well.
+- **Three upper fronts.** Print the upper body with the Steam Machine plate mount, with a plain hex mesh and no plate,
+  or with a screwed 156 × 126.1 panel frame that takes your own panel (mesh, plain, screen window, 120 mm fan).
 - **Swappable panels** everywhere else: lower front 156 × 72 (LCD window, plain, mesh), control strip 156 × 32
-  above the plate (Cherry MX power/reset switches, USB-C, 2 × USB-A), all on M3 countersunk screws into heat-set inserts.
+  above the plate (Cherry MX power/reset switches with USB-C + 2 × USB-A, or switches only), all on M3 countersunk screws into heat-set inserts.
   One placement rule for every removable part: screws 6 mm from the visible edge, clear of the corner radii.
 - **Removable PSU support.** The bracket that carries the PSU is its own screwed-in part with a footprint outline on
   the floor, so a PSU of another depth only needs a different support.
@@ -55,7 +57,7 @@ Other mATX boards following the ATX 2.2 hole pattern should fit; check `GPU_TAB_
 PETG, 0.2 mm layers, 3 perimeters, 20 % gyroid, no supports. Walls are 2.2 mm, lid 3 mm, outer corners R5.
 Print the body halves upright (skirt or mouse-ear brims, the footprint leaves ~3 mm to the bed edge), lid and
 panels face down. Wide openings carry thin breakaway ribs instead of supports; snap them off after printing.
-Total ≈ 660 cm³ (~840 g) plus the Steam plate (102 cm³ mesh, ~65 g at 20 % infill).
+Total ≈ 663 cm³ (~845 g) plus the Steam plate (103 cm³ mesh, ~65 g at 20 % infill).
 
 ## Licence
 

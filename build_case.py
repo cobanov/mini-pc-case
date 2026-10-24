@@ -61,8 +61,8 @@ COVER_IN_Z = 12.0      # side covers, from the top/bottom seams: clears the lid 
 TAB = 12.0             # rear joint tabs TAB × TAB, screw centred (= SCREW_IN to every edge)
 # Rear tabs at x 14 and 42: both left of the GPU opening (x ≥ 62) and the bracket tab (x 50.4), on full wall.
 # (The old tab at x 108 hung from the 1.8 mm strip above the opening and sat in front of the DP plug.)
-JOINT_SCREWS = [("front", 34), ("front", 110), ("rear", 14), ("rear", 42)]  # (wall, x); front screws hide behind the Steam plate
-JOINT_FRONT_Z = 95.0   # front joint screw: in the wall band below the plate opening (z ≥ 110), outside the magnet blocks (x 14–24, 148–158)
+JOINT_SCREWS = [("front", 40), ("front", 132), ("rear", 14), ("rear", 42)]  # (wall, x); front screws hide behind the Steam plate, clear of the magnet pockets (x ≤ 29.3, ≥ 142.7)
+JOINT_FRONT_Z = 95.0   # front joint screw: in the wall band below the plate opening (z ≥ 110)
 JOINT_REAR_Y = D + T - 1 + TAB / 2   # rear tab screw (tab sunk 1 mm into the wall, TAB outwards)
 PEGS = [(2.5, 7.5, 2.5, 7.5), (1.5, 6, D - 7.5, D - 2.5)]   # alignment pegs on the left posts
 _CY = (FIT + SCREW_IN, D - FIT - SCREW_IN)                  # cover screw y: SCREW_IN from the front/rear seam
@@ -90,16 +90,23 @@ PANELS = {
     "front_lower": dict(plate=(8, 164, 2, 74), open=(22, 150, 14, 62),
                         screws=[(x, z) for x in (8 + SCREW_IN, 164 - SCREW_IN) for z in (2 + SCREW_IN, 74 - SCREW_IN)]),
     # Upper front: interchangeable with the Steam Machine faceplate (Valve's official STEP: 156 x 126.1 x 6.5 mm,
-    # 4 K&J SB443-OUT 6.35 x 6.35 x 4.76 block magnets at (±67, ±52.5) from the plate centre, protruding 4 mm
-    # from the back). No recess: the plate sits on the outer face of the front wall; the case has magnet pockets there.
+    # magnets at (±67, ±52.5) from the plate centre, protruding 4 mm from the back). No recess: the plate sits on the
+    # outer face of the front wall. Magnets are common 20 x 10 x 2 mm neodymium bars (MAGNET): the case has a
+    # 20.6 x 10.6 pocket through the wall with a bar glued at its back; the printed plate carries a 20 x 10 x 1.5 boss
+    # with a bar glued on its tip, so the two magnets touch. Valve's 6.35 mm bosses enter the same pockets (loosely located).
     "faceplate": dict(plate=(8, 164, 88, 214.1), open=(30, 142, 110, 192), screws=[],   # opening 6 mm clear of the magnet pockets
                       magnets=[(19, 98.55), (153, 98.55), (19, 203.55), (153, 203.55)]),
+    # Upper front, screwed mode (body_upper_panel): same rule as the lower panel, 156 x 126.1 plate; the 13 mm band
+    # below the opening also carries the two front joint screws (z 95, hidden under the plate)
+    "front_upper": dict(plate=(8, 164, 88, 214.1), open=(20, 152, 101, 201.1),
+                        screws=[(x, z) for x in (8 + SCREW_IN, 164 - SCREW_IN) for z in (88 + SCREW_IN, 214.1 - SCREW_IN)]),
     # Control strip above the Steam plate: power in the centre, reset + USB-C left, 2 × USB-A right
     "strip": dict(plate=(8, 164, 218, 250), open=(22, 150, 225, 243),   # screws in the 14 mm bands either side of the opening
                   screws=[(x, z) for x in (8 + SCREW_IN, 164 - SCREW_IN) for z in (218 + SCREW_IN, 250 - SCREW_IN)]),
 }
 PANEL_R = 3.0                # outer corner radius of the removable panels
-MAGNET = (6.35, 4.76)        # SB443-OUT block magnet: edge, thickness
+MAGNET = (20.0, 10.0, 2.0)   # neodymium bar magnet: width (x), height (z), thickness; 8 pieces
+MAG_BOSS = 1.5               # printed boss under the plate's magnet; boss + magnet = 3.5 mm into the 4 mm deep pocket
 # Power and reset: Cherry MX style switch + keycap on the strip (x, z); keycap 18 mm, pitch 19.05
 SWITCHES = [(86.0, 234.0), (40.0, 234.0)]   # power centre, reset left
 USB_C = (60.0, 234.0)                       # panel mount USB-C extension: 9.6 x 3.9 opening
@@ -112,9 +119,9 @@ FAN_BOTTOM = (96.0, 104.0)   # (x, y) — under the GPU fan; 1 mm short of the S
 
 # Print orientations: body upright, lid upside down (flat face on the bed), lower side cover outer face
 # down, upper side cover inner face down (tongue and overlap rest on the bed), PSU support on its side.
-PRINT_ORIENT = {"body_lower": None, "body_upper": None, "lid": (V(1, 0, 0), 180), "foot": (V(1, 0, 0), 180),
-                "psu_support": (V(0, 1, 0), 90),
-                "strip": (V(1, 0, 0), 90), "strip_plain": (V(1, 0, 0), 90),
+PRINT_ORIENT = {"body_lower": None, "body_upper": None, "body_upper_mesh": None, "body_upper_panel": None,
+                "lid": (V(1, 0, 0), 180), "foot": (V(1, 0, 0), 180), "psu_support": (V(0, 1, 0), 90),
+                "strip": (V(1, 0, 0), 90), "strip_plain": (V(1, 0, 0), 90), "strip_switches": (V(1, 0, 0), 90),
                 "side_lower": (V(0, 1, 0), -90), "side_upper": (V(0, 1, 0), 90)}
 # I/O opening 158.75 x 44.45 (+ allowance); bottom edge 2.24 mm below the board's bottom face
 IO_X1 = X_BB + 2.24
@@ -207,8 +214,13 @@ def insert(x, y, z, d):
     return cyl((INSERT_D + TOL) / 2, INSERT_L, (x - d[0] * 0.1, y - d[1] * 0.1, z - d[2] * 0.1), d)
 
 # ---------------------------------------------------------------- body
-def body():
+def body(front="faceplate"):
     # outer shell (chamfered) − inner volume − left cover slot (covers sit between front/rear walls and the floor)
+    # front = "faceplate": Steam Machine plate mount (magnet pockets); "mesh": hex mesh cut straight into the front
+    # wall, no plate (the band z 88–104 stays solid for the two front joint screws); "panel": screwed 156 x 126.1
+    # panel like the lower one (PANELS["front_upper"]). Only the upper body differs between the three.
+    def active(key):
+        return not ((key == "faceplate" and front != "faceplate") or (key == "front_upper" and front != "panel"))
     s = chamfered_box(-T, W + T, -T, D + T, -T, H, EDGE, bottom=True)
     s = s.cut(box(0, W, 0, D, 0, H + 1))
     s = s.cut(box(-T - 1, 0, 0, D, 0, H + 1))
@@ -233,11 +245,11 @@ def body():
         s = s.fuse(rim.cut(box(x0 - FIT, x1 + FIT, y0 - FIT, y1 + FIT, -1, 1)))
     for x, y in FEET:                                          # foot screw bosses (inside)
         s = s.fuse(cyl(5, 6, (x, y, 0), (0, 0, 1)))
-    for key in PANELS:                                         # front panel bosses (inside of the front wall)
+    for key in filter(active, PANELS):                         # front panel bosses (inside of the front wall)
         for x, z in PANELS[key]["screws"]:
             s = s.fuse(cyl(4.5, 7.5, (x, 0, z), (0, 1, 0)))
         for x, z in PANELS[key].get("magnets", []):            # magnet blocks (inside of the front wall)
-            s = s.fuse(box(x - 5, x + 5, 0, 7.5, z - 5, z + 5))
+            s = s.fuse(box(x - MAGNET[0] / 2 - 2, x + MAGNET[0] / 2 + 2, 0, 7.5, z - MAGNET[1] / 2 - 2, z + MAGNET[1] / 2 + 2))
 
     cuts = []
     for dy, dz in HOLES:
@@ -267,7 +279,11 @@ def body():
         cuts.append(insert(x, y, -T, (0, 0, 1)))
     for y in PSU_SUP_SCREWS:                                   # PSU support inserts, from above
         cuts.append(insert(PSU_SUP_X[0] + 12, y, 6, (0, 0, -1)))
-    for key in PANELS:                                         # front panel openings, recesses, inserts
+    if front == "mesh":                                        # mesh front: hex grille over the plate area
+        pl = PANELS["faceplate"]["plate"]
+        cuts += hex_cutters(hex_centers(pl[0] + 3, pl[1] - 3, JOINT_FRONT_Z + 9, pl[3] - 3, 4.0),
+                            4.0, lambda u, v: V(u, -T - 1, v), V(0, T + 2, 0))
+    for key in filter(active, PANELS):                         # front panel openings, recesses, inserts
         pl, op = PANELS[key]["plate"], PANELS[key]["open"]
         cuts.append(box(op[0], op[1], -T - 1, 0.5, op[2], op[3]))
         if PANELS[key]["screws"]:
@@ -276,10 +292,10 @@ def body():
         for x, z in PANELS[key]["screws"]:
             cuts.append(cyl(4.3, 2.0, (x, -T + 1.25 - 0.01, z), (0, 1, 0)))   # panel pad pocket
             cuts.append(insert(x, 0.75, z, (0, 1, 0)))
-        # magnet pocket: the plate's magnet enters 4 mm (Y -T..1.5), the case magnet sits behind it (Y 1.5..6.26)
+        # magnet pocket: the plate's boss + magnet enter 4 mm (Y -T..1.5), the case magnet sits behind (Y 1.5..3.5)
         for x, z in PANELS[key].get("magnets", []):
-            h = MAGNET[0] / 2 + 0.15
-            cuts.append(box(x - h, x + h, -T - 1, 1.5 + MAGNET[1], z - h, z + h))
+            hx, hz = MAGNET[0] / 2 + 0.3, MAGNET[1] / 2 + 0.3
+            cuts.append(box(x - hx, x + hx, -T - 1, 1.5 + MAGNET[2], z - hz, z + hz))
     # ventilation: floor (under the GPU fan) and the CPU backplate area of the tray (right outer face)
     cuts += fan_cut(FAN_BOTTOM[0], FAN_BOTTOM[1], lambda u, v: V(u, v, -T - 1), V(0, 0, T + 2))   # bottom intake fan
     cuts += hex_cutters(hex_centers(CPU_Y - 40, CPU_Y + 40, CPU_Z - 40, CPU_Z + 40, 4.5),
@@ -289,7 +305,7 @@ def body():
     ribs = breakaway_ribs(io[0], io[1], D, D + 1.2, io[2], io[3])
     ribs += breakaway_ribs(X_TAB + 10.5, W - 2, D, D + T, Z_C - 44, Z_C + 4)
     ribs += breakaway_ribs(PSU_X0 + 26, PSU_X0 + 76, D, D + T, PSU_Z0 + 6, PSU_Z0 + 36)
-    for key in PANELS:
+    for key in filter(active, PANELS):
         op = PANELS[key]["open"]
         y0 = -T + 1.25 if PANELS[key]["screws"] else -T   # no recess (Steam plate): ribs span the full wall
         ribs += breakaway_ribs(op[0], op[1], y0, 0, op[2], op[3])
@@ -304,7 +320,7 @@ def body():
 # upper body. Front: 2 horizontal countersunk M3 from outside into blocks inside the lower body. Rear: the inside
 # is full of GPU/PSU, so 12 mm tabs outside; vertical screw from the upper tab into the lower one.
 # Both halves print upright.
-def split_body(full):
+def split_body(full, front="faceplate"):
     zj = Z_JOINT
     lower = full.common(box(-T - 1, W + T + 1, -T - 1, D + T + 12, -T - 1, zj))
     upper = full.common(box(-T - 1, W + T + 1, -T - 1, D + T + 12, zj, H + 1))
@@ -321,7 +337,7 @@ def split_body(full):
         if wall == "front":
             add.append(box(x - 4, x + 4, 0, 8, zj - 10, zj).fuse(box(x - 4, x + 4, FIT, 8, zj - 0.01, JOINT_FRONT_Z + 5)))
             cuts_lower.append(insert(x, FIT, JOINT_FRONT_Z, (0, 1, 0)))
-            cuts_upper += countersink(x, -T, JOINT_FRONT_Z, (0, 1, 0))
+            cuts_upper += countersink(x, -T + 1.25 if front == "panel" else -T, JOINT_FRONT_Z, (0, 1, 0))   # panel mode: head flush with the recess floor
         else:
             # lower tab TAB × TAB with a 45° underside (no support); upper tab 6 mm (below the PSU socket opening, z ≥ 86), M3 × 12
             h, y0, y1 = TAB / 2, D + T - 1, D + T - 1 + TAB
@@ -413,12 +429,11 @@ def front_panel(key, kind="mesh"):
         bx = box(a0, a1, y0, y1, b0, b1)
         return bx.makeFillet(r, [e for e in bx.Edges if abs(e.Vertexes[0].Point.y - e.Vertexes[1].Point.y) > 1e-6])
     if sp.get("magnets"):
-        # Steam Machine type: 6.5 mm plate sits on the outer face of the wall (Y -T-6.5..-T); 4 magnets on its back
-        # protrude 4 mm (pocket 0.8 deep, magnet glued in)
+        # Steam Machine type: 6.5 mm plate sits on the outer face of the wall (Y -T-6.5..-T); 4 printed bosses on its
+        # back, a bar magnet glued on each tip (boss 1.5 + magnet 2 = 3.5 mm into the case pocket)
         s = rbox(x0, x1, -T - 6.5, -T, z0, z1, PANEL_R)
         for x, z in sp["magnets"]:
-            h = MAGNET[0] / 2 + 0.1
-            cuts.append(box(x - h, x + h, -T - 0.8, -T + 1, z - h, z + h))
+            s = s.fuse(box(x - MAGNET[0] / 2, x + MAGNET[0] / 2, -T - 0.01, -T + MAG_BOSS, z - MAGNET[1] / 2, z + MAGNET[1] / 2))
         yf = -T - 6.5   # outer face
     else:
         # screwed panels: outer plate Y -T..-T+1.25 (in the recess), inner step Y -T+1.25..0 (in the opening)
@@ -436,13 +451,14 @@ def front_panel(key, kind="mesh"):
         cuts.append(box(cx - 37.5, cx + 37.5, yf - 1, 1, cz - 23, cz + 23))
     elif kind == "fan":      # 120 mm fan: grille + 4 screw holes (fan screwed to the panel from inside)
         cuts += fan_cut(cx, cz, lambda u, v: V(u, yf - 1, v), V(0, 10, 0))
-    elif kind == "controls": # control strip: 2 Cherry MX (14 x 14, 1.5 mm plate around), USB-C, 2 x USB-A
+    elif kind in ("controls", "switches"):   # control strip: 2 Cherry MX (14 x 14, 1.5 mm plate around); "controls" adds USB-C + 2 x USB-A
         for x, z in SWITCHES:
             cuts.append(box(x - 7.05, x + 7.05, yf - 1, 1, z - 7.05, z + 7.05))
             cuts.append(box(x - 10, x + 10, yf + 1.5, 1, z - 10, z + 10))
-        cuts.append(box(USB_C[0] - 4.8, USB_C[0] + 4.8, yf - 1, 1, USB_C[1] - 1.95, USB_C[1] + 1.95))
-        for x, z in USB_A:
-            cuts.append(box(x - 6.8, x + 6.8, yf - 1, 1, z - 3.2, z + 3.2))
+        if kind == "controls":
+            cuts.append(box(USB_C[0] - 4.8, USB_C[0] + 4.8, yf - 1, 1, USB_C[1] - 1.95, USB_C[1] + 1.95))
+            for x, z in USB_A:
+                cuts.append(box(x - 6.8, x + 6.8, yf - 1, 1, z - 3.2, z + 3.2))
     return cut_all(s, cuts)
 
 # ---------------------------------------------------------------- reference hardware (not printed)
@@ -530,17 +546,25 @@ def references():
                 rotor_cpu=(cpu_rotor, (0.45, 0.45, 0.5)), rotor_gpu=(gpu_rotor, (0.45, 0.45, 0.5)),
                 rotor_psu=(psu_rotor, (0.45, 0.45, 0.5)), ref_lcd=(lcd, (0.1, 0.1, 0.12)))
 
-PRINTED = ("body_lower", "body_upper", "lid", "side_lower", "side_upper", "foot", "psu_support", "front_lower", "faceplate", "strip")
+PRINTED = ("body_lower", "body_upper", "body_upper_mesh", "body_upper_panel", "lid", "side_lower", "side_upper", "foot", "psu_support",
+           "front_lower", "faceplate", "front_upper", "strip")
 
 def build(doc_name="MiniPCCase"):
     doc = App.getDocument(doc_name) if doc_name in App.listDocuments() else App.newDocument(doc_name)
     for o in list(doc.Objects):
         doc.removeObject(o.Name)
-    global FULL
+    global FULL, RIBS_BY
+    RIBS_BY = {}
+    _, upper_mesh = split_body(body("mesh"), "mesh")      # alternative upper bodies: mesh front / screwed panel
+    RIBS_BY["body_upper_mesh"] = RIBS
+    _, upper_panel = split_body(body("panel"), "panel")
+    RIBS_BY["body_upper_panel"] = RIBS
     FULL = body()
     lower, upper = split_body(FULL)
     parts = dict(body_lower=(lower, (0.82, 0.82, 0.85)),
                  body_upper=(upper, (0.7, 0.72, 0.78)),
+                 body_upper_mesh=(upper_mesh, (0.7, 0.72, 0.78)),
+                 body_upper_panel=(upper_panel, (0.7, 0.72, 0.78)),
                  lid=(lid(), (0.55, 0.57, 0.62)),
                  side_lower=(lower_cover(), (0.9, 0.6, 0.3)),
                  side_upper=(upper_cover(), (0.9, 0.6, 0.3)),
@@ -548,6 +572,7 @@ def build(doc_name="MiniPCCase"):
                  psu_support=(psu_support(), (0.5, 0.5, 0.55)),
                  front_lower=(front_panel("front_lower", "screen"), (0.15, 0.15, 0.17)),   # 3.5" LCD window
                  faceplate=(front_panel("faceplate", "mesh"), (0.2, 0.2, 0.22)),           # default mesh; plain variant for veneer / paint
+                 front_upper=(front_panel("front_upper", "mesh"), (0.15, 0.15, 0.17)),      # screwed upper panel (panel mode)
                  strip=(front_panel("strip", "controls"), (0.2, 0.2, 0.22)))
     parts.update(references())
     for name, (shape, color) in parts.items():
@@ -566,13 +591,18 @@ def build(doc_name="MiniPCCase"):
     # clash check: printed parts must not touch each other or the hardware
     names = list(PRINTED) + [n for n in parts if n.startswith("ref_")]   # rotors sit inside the fan frames, skipped
     clash = []
+    alternatives = {("body_upper", "body_upper_mesh"), ("body_upper", "body_upper_panel"), ("body_upper_mesh", "body_upper_panel"),
+                    ("body_upper_mesh", "faceplate"), ("body_upper_mesh", "front_upper"), ("body_upper_panel", "faceplate"),
+                    ("body_upper", "front_upper"), ("faceplate", "front_upper")}   # alternative fronts, never printed together
     for i, a in enumerate(names):
         for b in names[i + 1:]:
             if a.startswith("ref_") and b.startswith("ref_") and not (a.startswith("ref_fan") or b.startswith("ref_fan")):
                 continue   # hardware-hardware clashes are only checked for the case fans
+            if (a, b) in alternatives:
+                continue
             sa = doc.getObject(a).Shape
             if a.startswith("body"):
-                sa = sa.cut(RIBS)
+                sa = sa.cut(RIBS_BY.get(a, RIBS))
             v = sa.common(doc.getObject(b).Shape).Volume
             if v > 0.5:
                 clash.append((a, b, round(v)))
@@ -591,12 +621,13 @@ def export_stl(out_dir="/Users/cobanov/Developer/mini-pc-case/stl", doc_name="Mi
     doc = App.getDocument(doc_name)
     shapes = {n: doc.getObject(n).Shape for n in PRINTED}
     shapes["test_piece"] = test_piece(doc)
-    for key, kinds in (("front_lower", ("plain", "mesh")), ("faceplate", ("plain", "screen")), ("strip", ("plain",))):
+    for key, kinds in (("front_lower", ("plain", "mesh")), ("faceplate", ("plain", "screen")), ("front_upper", ("plain", "screen", "fan")),
+                       ("strip", ("switches", "plain"))):
         for k in kinds:
             shapes[f"{key}_{k}"] = front_panel(key, k)
     for n, sh in shapes.items():
         sh.exportStep(os.path.join(out_dir, f"{n}.step"))      # STEP in assembly coordinates
-        rot = PRINT_ORIENT.get(n, (V(1, 0, 0), 90) if n.startswith(("front_lower", "faceplate")) else None)   # STL in print orientation
+        rot = PRINT_ORIENT.get(n, (V(1, 0, 0), 90) if n.startswith(("front_lower", "faceplate", "front_upper")) else None)   # STL in print orientation
         p = sh.copy()
         if rot:
             p.rotate(V(0, 0, 0), rot[0], rot[1])
@@ -630,6 +661,9 @@ def check_fasteners(doc_name="MiniPCCase"):
         else: F.append(("body joint rear", "body_lower", "body_upper", (x, JOINT_REAR_Y, Z_JOINT), (0, 0, -1), 6))
     for x, z in PANELS["front_lower"]["screws"]: F.append(("lower front panel", "body_lower", "front_lower", (x, 0.75, z), (0, 1, 0), T + 0.75))
     for x, z in PANELS["strip"]["screws"]: F.append(("control strip", "body_upper", "strip", (x, 0.75, z), (0, 1, 0), T + 0.75))
+    for x, z in PANELS["front_upper"]["screws"]: F.append(("upper front panel", "body_upper_panel", "front_upper", (x, 0.75, z), (0, 1, 0), T + 0.75))
+    for wall, x in JOINT_SCREWS:
+        if wall == "front": F.append(("body joint front (panel body)", "body_lower", "body_upper_panel", (x, FIT, JOINT_FRONT_Z), (0, 1, 0), T + FIT - 1.25))
     for y in PSU_SUP_SCREWS: F.append(("PSU support", "body_lower", "psu_support", (PSU_SUP_X[0] + 12, y, 6), (0, 0, -1), 4))
     for x, y in FEET: F.append(("foot", "body_lower", None, (x, y, -T), (0, 0, 1), 0))
     for dy, dz in HOLES:
@@ -646,7 +680,7 @@ def check_fasteners(doc_name="MiniPCCase"):
         if scr:
             c2 = V(*p) - V(*d) * 1.2
             if probe(scr, c2): probs.append("no mating hole")
-            for q in ring(p, d, -1.9, 3.0):
+            for q in ring(p, d, -(t_out - 0.35), 3.0):   # just under the outer face
                 if not probe(scr, q): probs.append("mating hole on a part edge"); break
             for q in ring(p, d, -(t_out - 0.6), SCREW_IN - 0.5):   # just under the outer face, around the head: ≥ 2.2 mm to any edge
                 if not probe(scr, q): probs.append(f"edge margin around head < {SCREW_IN - 3.8:.1f} mm"); break
@@ -662,6 +696,8 @@ def check_print(doc_name="MiniPCCase", step=0.25):
     # length; anything over MAX_BRIDGE is listed.
     doc = App.getDocument(doc_name)
     for n, rot in PRINT_ORIENT.items():
+        if doc.getObject(n) is None:   # panel variants are only built on export
+            continue
         sh = doc.getObject(n).Shape.copy()
         if rot:
             sh.rotate(V(0, 0, 0), rot[0], rot[1])
