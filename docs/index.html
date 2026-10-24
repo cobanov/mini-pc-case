@@ -1,12 +1,12 @@
 <!doctype html>
-<html lang="tr">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="3D printed mini PC case for an mATX board, GTX 1050 Ti and ATX PSU: rotate, explode, airflow, dimensions and swappable Steam Machine compatible panels.">
+<meta name="description" content="3D printed mini PC case for an mATX board, GTX 1050 Ti and ATX PSU: rotate, explode, airflow, dimensions, swappable Steam Machine compatible panels and a size comparison with a Steam Machine and an iPhone.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='4' y='3' width='24' height='26' rx='4' fill='%232b2e33'/%3E%3Crect x='8' y='9' width='16' height='13' rx='1.5' fill='%237a4a2a'/%3E%3C/svg%3E">
 <style>html{color-scheme:light dark}img{max-width:100%}[hidden]{display:none!important}</style>
-<title>Mini PC Kasa</title>
+<title>Mini PC Case</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 /* Layout: full-height viewer, a narrow control rail on the left that stacks under the canvas on phones. */
@@ -40,6 +40,7 @@ details.sec[open] > summary::after { content: "–"; }
 .parts { display: flex; flex-direction: column; gap: 5px; }
 .part { display: grid; grid-template-columns: 16px 18px 1fr auto; align-items: center; gap: 8px; cursor: pointer; min-width: 0; }
 .part.compact { grid-template-columns: 18px auto; }
+.part.plain { grid-template-columns: 16px 1fr auto; }
 .part input { margin: 0; accent-color: var(--accent); }
 .sw { width: 18px; height: 18px; padding: 0; border: 1px solid rgba(0,0,0,.2); border-radius: 4px; background: none; cursor: pointer; }
 .sw::-webkit-color-swatch-wrapper { padding: 0; } .sw::-webkit-color-swatch { border: 0; border-radius: 3px; }
@@ -74,120 +75,134 @@ canvas { display: block; width: 100%; height: 100%; }
   .stage { order: 1; height: 60vh; }
 }
 </style>
-
 <style>.foot a{color:var(--accent)}</style>
 </head>
 <body>
+
 <div class="app">
   <aside class="rail">
     <header class="head">
-      <h1>Mini PC Kasa</h1>
+      <h1>Mini PC Case</h1>
       <div class="sub">H310M-K · GTX 1050 Ti · ATX PSU · 176 × 204 × 265 mm · 9.7 L</div>
     </header>
 
     <section class="sec">
-      <h2>Görünüm</h2>
-      <div class="seg" role="group" aria-label="Montaj durumu">
-        <button id="b-asm" class="on">Montaj</button><button id="b-exp">Patlatılmış</button>
+      <h2>View</h2>
+      <div class="seg" role="group" aria-label="Assembly state">
+        <button id="b-asm" class="on">Assembled</button><button id="b-exp">Exploded</button>
       </div>
-      <label class="slider"><span class="hint">Dağıtma</span><input type="range" id="explode" min="0" max="1" step="0.01" value="0"></label>
-      <div class="seg" role="group" aria-label="Kamera">
-        <button data-view="iso" class="on">İzo</button><button data-view="front">Ön</button><button data-view="rear">Arka</button><button data-view="left">Sol</button><button data-view="top">Üst</button>
+      <label class="slider"><span class="hint">Explode</span><input type="range" id="explode" min="0" max="1" step="0.01" value="0"></label>
+      <div class="seg" role="group" aria-label="Camera">
+        <button data-view="iso" class="on">Iso</button><button data-view="front">Front</button><button data-view="rear">Rear</button><button data-view="left">Left</button><button data-view="top">Top</button>
       </div>
       <div class="row">
-        <button id="b-air">Hava akışı</button>
-        <button id="b-dim">Ölçüler</button>
+        <button id="b-air">Airflow</button>
+        <button id="b-dim">Dimensions</button>
       </div>
-      <label class="slider" id="air-flow" hidden><span class="hint">Hava miktarı</span><input type="range" id="flow" min="0.2" max="2" step="0.05" value="1"></label>
-      <p class="hint" id="air-hint" hidden>Nitel gösterim, CFD değil: mavi soğuk, kırmızı ısınmış hava. Alt fan → GPU → soğutucu → üst fan. PSU kendi havasını yan ızgaradan alıp arkadan atar.</p>
+      <label class="slider" id="air-flow" hidden><span class="hint">Air volume</span><input type="range" id="flow" min="0.2" max="2" step="0.05" value="1"></label>
+      <p class="hint" id="air-hint" hidden>Qualitative, not CFD: blue is cool, red is warmed air. Bottom fan → GPU → cooler → top fan. The PSU takes its own air through the side grille and exhausts at the rear.</p>
     </section>
 
     <section class="sec">
-      <h2>Renk ve paneller</h2>
+      <h2>Colors and panels</h2>
       <div class="row between">
-        <label class="part compact"><input type="color" class="sw" id="body-color" value="#2b2e33" title="Gövde rengi"><span class="n">Gövde rengi</span></label>
-        <button id="b-reset-colors" class="ghost">Sıfırla</button>
+        <label class="part compact"><input type="color" class="sw" id="body-color" value="#2b2e33" title="Body color"><span class="n">Body color</span></label>
+        <button id="b-reset-colors" class="ghost">Reset</button>
       </div>
-      <p class="hint">Gövde rengi gövde, kapak, yan kapaklar, ayaklar ve şeridi birlikte boyar. Her parçanın yanındaki kutu tek tek değiştirir; panellerin menüsünden çeşidini seç.</p>
+      <p class="hint">Body color paints the body halves, lid, side covers, feet, PSU support and the strip together. The swatch next to each part changes it alone; pick a panel's variant from its menu.</p>
     </section>
 
     <details class="sec" open>
-      <summary><h2>Basılan parçalar</h2></summary>
+      <summary><h2>Printed parts (top to bottom)</h2></summary>
       <div class="parts" id="parts"></div>
     </details>
 
     <details class="sec">
-      <summary><h2>Donanım (basılmaz)</h2></summary>
+      <summary><h2>Hardware (not printed)</h2></summary>
       <div class="parts" id="refs"></div>
     </details>
 
     <details class="sec">
-      <summary><h2>Baskı ve montaj</h2></summary>
+      <summary><h2>Size comparison</h2></summary>
+      <div class="parts" id="scale"></div>
+      <p class="hint">Real dimensions, standing next to the case: Steam Machine from Valve's CAD release (156 × 162.4 × 152 mm), iPhone 18 Pro Max 163.4 × 78 × 8.75 mm.</p>
+    </details>
+
+    <details class="sec">
+      <summary><h2>Print and assembly</h2></summary>
       <dl class="kv">
-        <dt>Hacim</dt><dd>763 cm³ · ≈ 810 g PETG + Steam plakası (128 cm³, %20 dolgu ≈ 80 g)</dd>
-        <dt>Duvar</dt><dd>2.2 mm · üst kapak 3 mm · köşe R5</dd>
-        <dt>En yüksek parça</dt><dd>üst gövde 178 mm (K1: 220 × 220 × 250)</dd>
-        <dt>Gövde eki</dt><dd>Z = 80 · etek + 2 pim + 4 M3 (ön vidalar plakanın arkasında)</dd>
-        <dt>Fanlar</dt><dd>2 × 120 mm Molex: alt giriş, üst egzoz</dd>
-        <dt>Bağlantı</dt><dd>35 × M3 heat-set insert · 8 × SB443 mıknatıs</dd>
-        <dt>Paneller</dt><dd>Steam Machine plakası 156 × 126.1 · ön alt 156 × 72 · kontrol şeridi 156 × 32</dd>
-        <dt>Kontroller</dt><dd>MX güç + reset, USB-C, 2 × USB-A</dd>
+        <dt>Volume</dt><dd>788 cm³ · ≈ 840 g PETG + Steam plate (128 cm³, 20 % infill ≈ 80 g)</dd>
+        <dt>Walls</dt><dd>2.2 mm · lid 3 mm · corners R5</dd>
+        <dt>Tallest part</dt><dd>upper body 178 mm (K1: 220 × 220 × 250)</dd>
+        <dt>Body joint</dt><dd>Z = 80 · lip + 2 pegs + 4 M3 (front screws behind the plate)</dd>
+        <dt>Screws</dt><dd>6 mm from every edge of a removable part, clear of the radii</dd>
+        <dt>Fans</dt><dd>2 × 120 mm Molex: intake below, exhaust above</dd>
+        <dt>Fasteners</dt><dd>37 × M3 heat-set inserts · 8 × SB443 magnets</dd>
+        <dt>Panels</dt><dd>Steam Machine plate 156 × 126.1 · lower front 156 × 72 · control strip 156 × 32</dd>
+        <dt>Controls</dt><dd>MX power + reset, USB-C, 2 × USB-A</dd>
       </dl>
     </details>
 
-    <p class="hint foot">Sol tık döndürür, sağ tık kaydırır, tekerlek yakınlaştırır. Seçimler bu tarayıcıda kalır.<br>Açık kaynak: <a href="https://github.com/cobanov/mini-pc-kasa">github.com/cobanov/mini-pc-kasa</a></p>
+    <p class="hint foot">Left drag rotates, right drag pans, wheel zooms. Choices are kept in this browser.<br>Open source: <a href="https://github.com/cobanov/mini-pc-case">github.com/cobanov/mini-pc-case</a></p>
   </aside>
 
   <div class="stage">
     <canvas id="c"></canvas>
-    <div class="load" id="load">Model yükleniyor…</div>
+    <div class="load" id="load">Loading model…</div>
   </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 <script>
-// Model koordinatları mm, Z yukarı (FreeCAD ile aynı). Patlatma yönleri montaj sırasının tersi.
-// Renkler: gövde ve kapaklar mat antrasit PETG, yan kapaklar yarı saydam, Steam plakası ceviz kaplama,
-// alt panel siyah + LCD, üst panel antrasit; donanım gerçek renklerine yakın.
+// Model coordinates in mm, Z up (same as FreeCAD). Explode directions follow the reverse of the assembly order.
+// Colors: body and covers matte anthracite PETG, side covers translucent, Steam plate walnut veneer,
+// lower panel black + LCD, strip anthracite; hardware close to its real colors.
+// Printed parts listed top to bottom as they sit in the case.
 const PARTS = [
-  { id: "govde_alt", name: "Alt gövde",      vol: 227, color: 0x2b2e33, explode: [0, 0, 0] },
-  { id: "govde_ust", name: "Üst gövde",      vol: 231, color: 0x2b2e33, explode: [0, 0, 90] },
-  { id: "ust_kapak", name: "Üst kapak",      vol: 81,  color: 0x2b2e33, explode: [0, 0, 190] },
-  { id: "yan_alt",   name: "Sol yan, alt (SSD)", vol: 39,  color: 0x3a3e45, explode: [-90, 0, 0], alpha: 0.5 },
-  { id: "yan_ust",   name: "Sol yan, üst",   vol: 74,  color: 0x3a3e45, explode: [-90, 0, 90], alpha: 0.5 },
-  { id: "on_panel_alt", name: "Ön alt panel 156×72", vol: 14, color: 0x1c1d20, explode: [0, -80, 0], gloss: true,
-    variants: [{ k: "ekran", label: "LCD ekran" }, { k: "duz", label: "Düz" }, { k: "petek", label: "Petek" }] },
-  { id: "on_panel_ust", name: "Steam Machine plakası 156×126", vol: 128, color: 0xffffff, explode: [0, -80, 90],
-    variants: [{ k: "duz", label: "Ahşap (ceviz)", wood: true }, { k: "duz", label: "Düz (boya / kendi tasarımın)", color: 0x2b2e33 },
-               { k: "petek", label: "Petek", color: 0x2b2e33 }, { k: "ekran", label: "Ekran penceresi", color: 0x2b2e33 }] },
-  { id: "on_serit",     name: "Kontrol şeridi 156×32", vol: 7, color: 0x2b2e33, explode: [0, -80, 150],
-    variants: [{ k: "tus", label: "Güç, reset, USB-C, 2×USB-A" }, { k: "duz", label: "Düz" }] },
-  { id: "ayak",      name: "Ayak × 4",       vol: 16,  color: 0x1a1b1e, explode: [0, 0, -40], copies: [[0, 0, 0], [151, 0, 0], [0, 176, 0], [151, 176, 0]] },
+  { id: "lid",         name: "Lid",                     vol: 91,  color: 0x2b2e33, explode: [0, 0, 190] },
+  { id: "body_upper",  name: "Upper body",              vol: 214, color: 0x2b2e33, explode: [0, 0, 90] },
+  { id: "side_upper",  name: "Left side cover, upper",  vol: 65,  color: 0x3a3e45, explode: [-90, 0, 90], alpha: 0.5 },
+  { id: "strip",       name: "Control strip 156×32",    vol: 7,   color: 0x2b2e33, explode: [0, -80, 150],
+    variants: [{ k: "controls", label: "Power, reset, USB-C, 2×USB-A" }, { k: "plain", label: "Plain" }] },
+  { id: "faceplate",   name: "Steam Machine plate 156×126", vol: 128, color: 0xffffff, explode: [0, -80, 90],
+    variants: [{ k: "plain", label: "Wood (walnut)", wood: true }, { k: "plain", label: "Plain (paint / your own design)", color: 0x2b2e33 },
+               { k: "mesh", label: "Mesh", color: 0x2b2e33 }, { k: "screen", label: "Screen window", color: 0x2b2e33 }] },
+  { id: "body_lower",  name: "Lower body",              vol: 181, color: 0x2b2e33, explode: [0, 0, 0] },
+  { id: "side_lower",  name: "Left side cover, lower (SSD)", vol: 35, color: 0x3a3e45, explode: [-90, 0, 0], alpha: 0.5 },
+  { id: "front_lower", name: "Lower front panel 156×72", vol: 12, color: 0x1c1d20, explode: [0, -80, 0], gloss: true,
+    variants: [{ k: "screen", label: "LCD screen" }, { k: "plain", label: "Plain" }, { k: "mesh", label: "Mesh" }] },
+  { id: "psu_support", name: "PSU support (removable)", vol: 39,  color: 0x2b2e33, explode: [0, 0, 40] },
+  { id: "foot",        name: "Feet × 4",                vol: 16,  color: 0x1a1b1e, explode: [0, 0, -40], copies: [[0, 0, 0], [151, 0, 0], [0, 176, 0], [151, 176, 0]] },
 ];
 const REFS = [
-  { id: "ref_board",   name: "Anakart",       color: 0x1f3d2a },
-  { id: "ref_gpu",     name: "GTX 1050 Ti",   color: 0x23262b },
-  { id: "ref_bracket", name: "GPU braketi",   color: 0xb8bcc2, metal: true },
-  { id: "ref_cooler",  name: "RC400 soğutucu", color: 0x8a8f96, metal: true },
-  { id: "ref_psu",     name: "PSU",           color: 0x202226 },
-  { id: "ref_ssd",     name: "2.5\" SSD (yan kapakta)", color: 0x5b6066 },
-  { id: "ref_fan",     name: "120 mm egzoz fanı (üst)", color: 0x1e2024 },
-  { id: "ref_fan_alt", name: "120 mm giriş fanı (alt)", color: 0x1e2024 },
-  { id: "ref_lcd",     name: "3.5\" LCD modülü", color: 0x101114 },
+  { id: "ref_board",      name: "Motherboard",            color: 0x1f3d2a },
+  { id: "ref_gpu",        name: "GTX 1050 Ti",            color: 0x23262b },
+  { id: "ref_bracket",    name: "GPU bracket",            color: 0xb8bcc2, metal: true },
+  { id: "ref_cooler",     name: "RC400 cooler",           color: 0x8a8f96, metal: true },
+  { id: "ref_psu",        name: "PSU",                    color: 0x202226 },
+  { id: "ref_ssd",        name: "2.5\" SSD (on the side cover)", color: 0x5b6066 },
+  { id: "ref_fan_top",    name: "120 mm exhaust fan (top)", color: 0x1e2024 },
+  { id: "ref_fan_bottom", name: "120 mm intake fan (bottom)", color: 0x1e2024 },
+  { id: "ref_lcd",        name: "3.5\" LCD module",       color: 0x101114 },
 ];
-// Pervaneler: ait olduğu parça, dönme ekseni ve merkezi (mm); hava akışı açıkken dönerler.
+// Rotors: parent part, spin axis and centre (mm); they spin while airflow is on.
 const ROTORS = [
-  { id: "rotor_ust", parent: "ref_fan",     axis: [0, 0, 1], c: [102, 100, 245.5], rpm: 1100 },
-  { id: "rotor_alt", parent: "ref_fan_alt", axis: [0, 0, 1], c: [96, 104, 12.5],   rpm: 1100 },
-  { id: "rotor_cpu", parent: "ref_cooler",  axis: [1, 0, 0], c: [110.55, 99.7, 152.2], rpm: 1800 },
-  { id: "rotor_gpu", parent: "ref_gpu",     axis: [0, 0, 1], c: [105.05, 104, 43.2], rpm: 1500 },
-  { id: "rotor_psu", parent: "ref_psu",     axis: [1, 0, 0], c: [16, 130, 155],   rpm: 900 },
+  { id: "rotor_top",    parent: "ref_fan_top",    axis: [0, 0, 1], c: [102, 100, 245.5], rpm: 1100 },
+  { id: "rotor_bottom", parent: "ref_fan_bottom", axis: [0, 0, 1], c: [96, 104, 12.5],   rpm: 1100 },
+  { id: "rotor_cpu",    parent: "ref_cooler",     axis: [1, 0, 0], c: [110.55, 99.7, 152.2], rpm: 1800 },
+  { id: "rotor_gpu",    parent: "ref_gpu",        axis: [0, 0, 1], c: [105.05, 104, 43.2], rpm: 1500 },
+  { id: "rotor_psu",    parent: "ref_psu",        axis: [1, 0, 0], c: [16, 130, 155],   rpm: 900 },
 ];
-// Donanım parçaları, takılı oldukları gövde yarısıyla birlikte dağılır.
-const REF_FOLLOW = { ref_board: "govde_alt", ref_gpu: "govde_alt", ref_bracket: "govde_alt", ref_cooler: "govde_alt",
-                     ref_psu: "govde_ust", ref_ssd: "yan_alt", ref_fan: "ust_kapak", ref_fan_alt: "govde_alt", ref_lcd: "on_panel_alt" };
-const BODY_IDS = ["govde_alt", "govde_ust", "ust_kapak", "yan_alt", "yan_ust", "ayak", "on_serit"];   // tek renkle boyanan gövde parçaları
+// Hardware explodes together with the body half it is mounted in.
+const REF_FOLLOW = { ref_board: "body_lower", ref_gpu: "body_lower", ref_bracket: "body_lower", ref_cooler: "body_lower",
+                     ref_psu: "body_upper", ref_ssd: "side_lower", ref_fan_top: "lid", ref_fan_bottom: "body_lower", ref_lcd: "front_lower" };
+const BODY_IDS = ["body_lower", "body_upper", "lid", "side_lower", "side_upper", "foot", "strip", "psu_support"];   // parts painted by the body color
+// Size references, off by default, not exploded. Steam Machine meshed from Valve's STEP; iPhone built here.
+const SCALE = [
+  { id: "ref_steam_machine", name: "Steam Machine", dims: "156 × 162 × 152", color: 0x1b1d22, file: true },
+  { id: "ref_iphone", name: "iPhone 18 Pro Max", dims: "163 × 78 × 8.8", color: 0x2a2c31 },
+];
 
 const canvas = document.getElementById("c");
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
@@ -206,11 +221,11 @@ controls.target.copy(CENTER);
 scene.add(new THREE.HemisphereLight(0xffffff, 0x5a6478, 0.95));
 const key = new THREE.DirectionalLight(0xffffff, 1.1); key.position.set(-350, -450, 650);
 key.castShadow = true; key.shadow.mapSize.set(2048, 2048);
-Object.assign(key.shadow.camera, { left: -300, right: 300, top: 300, bottom: -300, near: 100, far: 1800 });
+Object.assign(key.shadow.camera, { left: -300, right: 500, top: 300, bottom: -300, near: 100, far: 1800 });
 key.shadow.bias = -0.0005; key.target.position.copy(CENTER); scene.add(key, key.target);
 const fill = new THREE.DirectionalLight(0xffffff, 0.35); fill.position.set(500, 300, 250); scene.add(fill);
 const rim = new THREE.DirectionalLight(0xdfe8ff, 0.25); rim.position.set(100, 600, 150); scene.add(rim);
-// zemin: gölge alır, modeli taşır
+// ground: catches shadows, carries the model
 const ground = new THREE.Mesh(new THREE.PlaneGeometry(1400, 1400), new THREE.ShadowMaterial({ opacity: 0.22 }));
 ground.position.set(86, 100, -14.5); ground.receiveShadow = true; scene.add(ground);
 const grid = new THREE.GridHelper(600, 30, 0x888888, 0x888888);
@@ -230,12 +245,12 @@ applyTheme();
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", applyTheme);
 new MutationObserver(applyTheme).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
-// Ceviz kaplama: canvas üzerine damarlı doku (prosedürel), tekrar etmez
+// Walnut veneer: procedural grain on a canvas, no repeating tile
 function woodMaterial() {
   const c = document.createElement("canvas"); c.width = 1024; c.height = 1024;
   const x = c.getContext("2d");
   x.fillStyle = "#6e3f21"; x.fillRect(0, 0, 1024, 1024);
-  for (let i = 0; i < 260; i++) {          // damarlar: hafif dalgalı yatay şeritler
+  for (let i = 0; i < 260; i++) {          // grain: slightly wavy horizontal streaks
     const y0 = Math.random() * 1024, w = 1 + Math.random() * 6, a = 0.08 + Math.random() * 0.25;
     x.strokeStyle = Math.random() < 0.5 ? `rgba(60,28,12,${a})` : `rgba(160,100,55,${a * 0.8})`;
     x.lineWidth = w; x.beginPath();
@@ -245,9 +260,9 @@ function woodMaterial() {
   const g = x.createLinearGradient(0, 0, 1024, 0); g.addColorStop(0, "rgba(255,220,180,0.10)"); g.addColorStop(0.5, "rgba(0,0,0,0.06)"); g.addColorStop(1, "rgba(255,220,180,0.10)");
   x.fillStyle = g; x.fillRect(0, 0, 1024, 1024);
   const tex = new THREE.CanvasTexture(c); tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.encoding = THREE.sRGBEncoding; tex.anisotropy = 8;
-  return new THREE.MeshStandardMaterial({ map: tex, color: 0xffffff, roughness: 0.45, metalness: 0.0, side: THREE.DoubleSide });   // renk seçici dokuyu tonlar
+  return new THREE.MeshStandardMaterial({ map: tex, color: 0xffffff, roughness: 0.45, metalness: 0.0, side: THREE.DoubleSide });   // the color picker tints the texture
 }
-// LCD: alt paneldeki pencerede ışıklı ekran (CPU/GPU sıcaklığı örneği)
+// LCD: lit screen in the lower panel window (CPU/GPU temperature mock-up)
 function lcdScreen() {
   const c = document.createElement("canvas"); c.width = 480; c.height = 320;
   const x = c.getContext("2d");
@@ -262,30 +277,37 @@ function lcdScreen() {
     x.fillStyle = "#9fb3c8"; x.fillText(r[1], 346, y); });
   const tex = new THREE.CanvasTexture(c); tex.encoding = THREE.sRGBEncoding;
   const m = new THREE.Mesh(new THREE.PlaneGeometry(75, 46), new THREE.MeshBasicMaterial({ map: tex }));
-  m.rotation.x = Math.PI / 2;            // XZ düzlemine, -Y'ye bakar
-  m.position.set(86, -0.6, 38);          // alt panel açıklığının ortası
+  m.rotation.x = Math.PI / 2;            // in the XZ plane, facing -Y
+  m.position.set(86, -0.6, 38);          // centre of the lower panel opening
   return m;
 }
 const LCD = lcdScreen(); scene.add(LCD);
-const meshes = {}, rotors = {};
+const meshes = {}, rotors = {}, scaleRefs = {};
 let pending = PARTS.length + REFS.length + ROTORS.length;
 function loaded() { if (--pending === 0) document.getElementById("load").hidden = true; render(); }
-let savedVariants = {}; try { savedVariants = JSON.parse(localStorage.getItem("kasa-panel") || "{}"); } catch (e) {}
+let savedVariants = {}; try { savedVariants = JSON.parse(localStorage.getItem("case-panel") || "{}"); } catch (e) {}
 function variantOf(def) { const i = savedVariants[def.id] ?? 0; return def.variants ? def.variants[Math.min(i, def.variants.length - 1)] : null; }
 const geoCache = {};
+function fetchGeo(file) {
+  return geoCache[file] ? Promise.resolve(geoCache[file]) : fetch("mesh/" + file + ".json").then(r => r.json()).then(pos => (geoCache[file] = pos));
+}
+function geometryFrom(pos) {
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+  geo.computeVertexNormals();
+  return geo;
+}
 function load(def, isRef) {
   const v = variantOf(def);
   const file = v ? `${def.id}__${v.k}` : def.id;
   const wood = v ? !!v.wood : !!def.wood;
   const color = v && v.color != null ? v.color : def.color;
-  (geoCache[file] ? Promise.resolve(geoCache[file]) : fetch("mesh/" + file + ".json").then(r => r.json()).then(pos => (geoCache[file] = pos))).then(pos => {
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
-    geo.computeVertexNormals();
+  fetchGeo(file).then(pos => {
+    const geo = geometryFrom(pos);
     const mat = wood ? woodMaterial() : new THREE.MeshStandardMaterial({
       color, metalness: def.metal ? 0.7 : (isRef ? 0.1 : 0.0), roughness: def.gloss ? 0.3 : (def.metal ? 0.35 : 0.62),
       transparent: !!def.alpha, opacity: def.alpha || 1, side: THREE.DoubleSide });
-    if (wood) { geo.computeBoundingBox(); const bb = geo.boundingBox;   // kutu UV: x→u, z→v (plaka ön yüzü XZ düzleminde)
+    if (wood) { geo.computeBoundingBox(); const bb = geo.boundingBox;   // box UV: x→u, z→v (plate front is in the XZ plane)
       const uv = new Float32Array(pos.length / 3 * 2);
       for (let i = 0; i < pos.length / 3; i++) { uv[i * 2] = (pos[i * 3] - bb.min.x) / 156; uv[i * 2 + 1] = (pos[i * 3 + 2] - bb.min.z) / 126; }
       geo.setAttribute("uv", new THREE.BufferAttribute(uv, 2)); }
@@ -293,7 +315,7 @@ function load(def, isRef) {
     (def.copies || [[0, 0, 0]]).forEach(c => {
       const k = new THREE.Mesh(geo, mat); k.position.set(c[0], c[1], c[2]);
       k.castShadow = true; k.receiveShadow = !def.alpha; m.add(k);
-      if (!isRef && !wood) {   // basılan parçalarda ince kenar çizgileri: 3D baskı görünümü, detay okunur
+      if (!isRef && !wood) {   // thin edge lines on printed parts: reads like a 3D print, details stay legible
         const e = new THREE.LineSegments(new THREE.EdgesGeometry(geo, 25), new THREE.LineBasicMaterial({ color: 0x1c2230, transparent: true, opacity: 0.18 }));
         e.position.copy(k.position); m.add(e);
       }
@@ -304,36 +326,68 @@ function load(def, isRef) {
     meshes[def.id] = m;
     scene.add(m);
     if (savedColors[def.id] && !wood) applyColor(def.id, savedColors[def.id]);
-    if (def.id === "on_panel_alt") LCD.visible = m.visible && v && v.k === "ekran";
+    if (def.id === "front_lower") LCD.visible = m.visible && v && v.k === "screen";
     if (old) render(); else loaded();
-  }).catch(() => { document.getElementById("load").textContent = "Model yüklenemedi: " + def.id; });
+  }).catch(() => { document.getElementById("load").textContent = "Could not load model: " + def.id; });
 }
 function setVariant(def, i) {
-  savedVariants[def.id] = i; try { localStorage.setItem("kasa-panel", JSON.stringify(savedVariants)); } catch (e) {}
+  savedVariants[def.id] = i; try { localStorage.setItem("case-panel", JSON.stringify(savedVariants)); } catch (e) {}
   const ci = document.getElementById("col-" + def.id), v = def.variants[i];
   if (ci) { ci.value = hex(v.color != null ? v.color : def.color); ci.disabled = !!v.wood; }
   delete savedColors[def.id];
   load(def, false);
 }
 function loadRotor(def) {
-  fetch("mesh/" + def.id + ".json").then(r => r.json()).then(pos => {
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
-    geo.computeVertexNormals();
-    geo.translate(-def.c[0], -def.c[1], -def.c[2]);   // dönme merkezi orijine
+  fetchGeo(def.id).then(pos => {
+    const geo = geometryFrom(pos);
+    geo.translate(-def.c[0], -def.c[1], -def.c[2]);   // spin centre to the origin
     const k = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color: 0x6b7280, metalness: 0.2, roughness: 0.5, side: THREE.DoubleSide }));
     k.castShadow = true;
     const g = new THREE.Group(); g.position.set(def.c[0], def.c[1], def.c[2]); g.add(k);
     g.userData = { def }; rotors[def.id] = g; scene.add(g);
     loaded();
-  }).catch(() => { document.getElementById("load").textContent = "Model yüklenemedi: " + def.id; });
+  }).catch(() => { document.getElementById("load").textContent = "Could not load model: " + def.id; });
+}
+// iPhone 18 Pro Max: 163.4 × 78 × 8.75 mm, corner radius ≈ 14, standing upright to the right of the Steam Machine,
+// screen flush with the case front. Dark titanium body, near-black glass, camera plateau on the back.
+function iphone() {
+  const w = 78, h = 163.4, d = 8.75, r = 14, x0 = 410, zb = -14.2, yf = -8.7;
+  const sh = new THREE.Shape();
+  sh.moveTo(r, 0); sh.lineTo(w - r, 0); sh.quadraticCurveTo(w, 0, w, r); sh.lineTo(w, h - r); sh.quadraticCurveTo(w, h, w - r, h);
+  sh.lineTo(r, h); sh.quadraticCurveTo(0, h, 0, h - r); sh.lineTo(0, r); sh.quadraticCurveTo(0, 0, r, 0);
+  const geo = new THREE.ExtrudeGeometry(sh, { depth: d - 1.6, bevelEnabled: true, bevelSize: 0.8, bevelThickness: 0.8, bevelSegments: 3, curveSegments: 12 });
+  geo.rotateX(Math.PI / 2);                 // shape XY → XZ; extrusion runs along -Y, so the back face is at the origin
+  const body = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color: 0x2a2c31, metalness: 0.6, roughness: 0.35 }));
+  body.position.set(x0, yf + d - 0.8, zb); body.castShadow = true;
+  const glass = new THREE.Mesh(new THREE.PlaneGeometry(w - 4, h - 4), new THREE.MeshStandardMaterial({ color: 0x07080a, metalness: 0.2, roughness: 0.1 }));
+  glass.rotation.x = Math.PI / 2; glass.position.set(x0 + w / 2, yf - 0.05, zb + h / 2);
+  const island = new THREE.Mesh(new THREE.BoxGeometry(38, 2, 38), new THREE.MeshStandardMaterial({ color: 0x1b1d21, metalness: 0.5, roughness: 0.4 }));
+  island.position.set(x0 + 30, yf + d + 1, zb + h - 30);
+  const g = new THREE.Group(); g.add(body, glass, island); return g;
+}
+function setScale(def, on) {
+  const show = g => { g.visible = on; render(); };
+  if (scaleRefs[def.id]) return show(scaleRefs[def.id]);
+  if (!on) return;
+  if (def.file) {
+    document.getElementById("load").hidden = false; document.getElementById("load").textContent = "Loading " + def.name + "…";
+    fetchGeo(def.id).then(pos => {
+      const k = new THREE.Mesh(geometryFrom(pos), new THREE.MeshStandardMaterial({ color: def.color, metalness: 0.05, roughness: 0.6, side: THREE.DoubleSide }));
+      k.castShadow = true; k.receiveShadow = true;
+      const g = new THREE.Group(); g.add(k); scene.add(g); scaleRefs[def.id] = g;
+      document.getElementById("load").hidden = true;
+      show(g);
+    }).catch(() => { document.getElementById("load").textContent = "Could not load model: " + def.id; });
+  } else {
+    const g = iphone(); scene.add(g); scaleRefs[def.id] = g; show(g);
+  }
 }
 PARTS.forEach(p => load(p, false));
 REFS.forEach(r => load(r, true));
 ROTORS.forEach(loadRotor);
 
 const hex = c => "#" + c.toString(16).padStart(6, "0");
-let savedColors = {}; try { savedColors = JSON.parse(localStorage.getItem("kasa-renk") || "{}"); } catch (e) {}
+let savedColors = {}; try { savedColors = JSON.parse(localStorage.getItem("case-color") || "{}"); } catch (e) {}
 function applyColor(id, value) {
   const m = meshes[id]; if (!m) return;
   m.traverse(k => { if (k.isMesh && k.material && k.material.color) k.material.color.set(value); });
@@ -343,15 +397,15 @@ function list(el, defs, isRef) {
   defs.forEach(d => {
     const row = document.createElement("label"); row.className = "part";
     const col = savedColors[d.id] || hex(d.color);
-    row.innerHTML = `<input type="checkbox" id="chk-${d.id}" checked><input type="color" class="sw" id="col-${d.id}" value="${col}" title="Renk">` +
+    row.innerHTML = `<input type="checkbox" id="chk-${d.id}" checked><input type="color" class="sw" id="col-${d.id}" value="${col}" title="Color">` +
       `<span class="n">${d.name}</span><span class="v">${isRef ? "" : d.vol + " cm³"}</span>`;
     row.querySelector("input[type=checkbox]").addEventListener("change", e => { setVisible(d.id, e.target.checked); render(); });
     const ci = row.querySelector("input[type=color]");
     ci.addEventListener("click", e => e.stopPropagation());
     ci.addEventListener("input", e => { savedColors[d.id] = e.target.value; applyColor(d.id, e.target.value);
-      try { localStorage.setItem("kasa-renk", JSON.stringify(savedColors)); } catch (err) {} });
+      try { localStorage.setItem("case-color", JSON.stringify(savedColors)); } catch (err) {} });
     el.appendChild(row);
-    if (d.variants) {   // panel çeşidi
+    if (d.variants) {   // panel variant
       const sel = document.createElement("select"); sel.id = "var-" + d.id; sel.className = "variant";
       d.variants.forEach((v, i) => { const o = document.createElement("option"); o.value = i; o.textContent = v.label; sel.appendChild(o); });
       sel.value = Math.min(savedVariants[d.id] ?? 0, d.variants.length - 1);
@@ -363,22 +417,28 @@ function list(el, defs, isRef) {
 }
 document.getElementById("body-color").addEventListener("input", e => {
   BODY_IDS.forEach(id => { savedColors[id] = e.target.value; applyColor(id, e.target.value); const ci = document.getElementById("col-" + id); if (ci) ci.value = e.target.value; });
-  try { localStorage.setItem("kasa-renk", JSON.stringify(savedColors)); } catch (err) {}
+  try { localStorage.setItem("case-color", JSON.stringify(savedColors)); } catch (err) {}
 });
 document.getElementById("b-reset-colors").addEventListener("click", () => {
-  savedColors = {}; try { localStorage.removeItem("kasa-renk"); } catch (e) {}
+  savedColors = {}; try { localStorage.removeItem("case-color"); } catch (e) {}
   [...PARTS, ...REFS].forEach(d => { const v = variantOf(d), c = v && v.color != null ? v.color : d.color;
     const ci = document.getElementById("col-" + d.id); if (ci) ci.value = hex(c); if (!(v && v.wood)) applyColor(d.id, c); });
   document.getElementById("body-color").value = "#2b2e33";
 });
 function setVisible(id, on) {
   if (meshes[id]) meshes[id].visible = on;
-  if (id === "on_panel_alt") { const v = variantOf(PARTS.find(p => p.id === id)); LCD.visible = on && v && v.k === "ekran"; }
+  if (id === "front_lower") { const v = variantOf(PARTS.find(p => p.id === id)); LCD.visible = on && v && v.k === "screen"; }
   ROTORS.filter(r => r.parent === id).forEach(r => { if (rotors[r.id]) rotors[r.id].visible = on; });
   const c = document.getElementById("chk-" + id); if (c) c.checked = on;
 }
 list(document.getElementById("parts"), PARTS, false);
 list(document.getElementById("refs"), REFS, true);
+SCALE.forEach(d => {
+  const row = document.createElement("label"); row.className = "part plain";
+  row.innerHTML = `<input type="checkbox" id="chk-${d.id}"><span class="n">${d.name}</span><span class="v">${d.dims}</span>`;
+  row.querySelector("input").addEventListener("change", e => setScale(d, e.target.checked));
+  document.getElementById("scale").appendChild(row);
+});
 
 const slider = document.getElementById("explode");
 function explodeOf(id) {
@@ -391,7 +451,7 @@ function setExplode(t) {
   document.getElementById("b-asm").classList.toggle("on", t < 0.01);
   document.getElementById("b-exp").classList.toggle("on", t >= 0.99);
   for (const id in meshes) { const e = explodeOf(id); meshes[id].position.set(e[0] * t, e[1] * t, e[2] * t); }
-  { const e = explodeOf("on_panel_alt"); LCD.position.set(86 + e[0] * t, -0.6 + e[1] * t, 38 + e[2] * t); }
+  { const e = explodeOf("front_lower"); LCD.position.set(86 + e[0] * t, -0.6 + e[1] * t, 38 + e[2] * t); }
   for (const id in rotors) { const e = explodeOf(id), c = rotors[id].userData.def.c; rotors[id].position.set(c[0] + e[0] * t, c[1] + e[1] * t, c[2] + e[2] * t); }
   render();
 }
@@ -431,21 +491,21 @@ function render() { resize(); renderer.render(scene, camera); }
 controls.addEventListener("change", render);
 addEventListener("resize", render);
 
-// ---- Hava akışı: parçacıklar basit bir hız alanını izler (nitel gösterim, CFD değil) ----
-// Kaynak: alt fan jeti (+Z), tabla arkası peteği (pasif). Çıkış: üst fan. Soğutucu ve GPU fanları
-// emiş/üfleme çiftleri. Engeller eksen hizalı kutular; "Hava miktarı" hızı ve yoğunluğu ölçekler.
+// ---- Airflow: particles follow a simple velocity field (qualitative, not CFD) ----
+// Sources: bottom fan jet (+Z), tray backplate grille (passive). Sink: top fan. Cooler and GPU fans are
+// suction/blow pairs. Obstacles are axis-aligned boxes; "Air volume" scales speed and density.
 const flowEl = document.getElementById("flow");
 const AIR = (() => {
   const N = 2600;
   const IN = { x: [0, 172], y: [0, 200], z: [0, 258] };
   const OBS = [
     { b: [[8, 94], [60, 200], [80, 230]], heat: 0 },     // PSU
-    { b: [[157, 172], [13, 198], [12, 238]], heat: 0 },  // anakart + konnektörler
-    { b: [[103, 164], [52, 147], [105, 200]], heat: 2.0, fan: { sink: [96, 100, 152], src: [150, 100, 152], k: 2.2e3 } },  // soğutucu
+    { b: [[157, 172], [13, 198], [12, 238]], heat: 0 },  // motherboard + connectors
+    { b: [[103, 164], [52, 147], [105, 200]], heat: 2.0, fan: { sink: [96, 100, 152], src: [150, 100, 152], k: 2.2e3 } },  // cooler
     { b: [[53, 164], [8, 199], [37, 77]], heat: 1.5, fan: { sink: [105, 104, 30], src: [105, 104, 85], k: 1.6e3 } },      // GPU
-    { b: [[0, 9], [45, 145], [5, 75]], heat: 0.3 },      // SSD (yan kapakta)
-    { b: [[36, 156], [44, 164], [0, 25]], heat: 0 },     // alt fan gövdesi
-    { b: [[42, 162], [40, 160], [233, 258]], heat: 0 },  // üst fan gövdesi
+    { b: [[0, 9], [45, 145], [5, 75]], heat: 0.3 },      // SSD (on the side cover)
+    { b: [[36, 156], [44, 164], [0, 25]], heat: 0 },     // bottom fan frame
+    { b: [[42, 162], [40, 160], [233, 258]], heat: 0 },  // top fan frame
   ];
   const EXIT = { x: [42, 162], y: [40, 160], z: 232 };
   const pos = new Float32Array(N * 3), col = new Float32Array(N * 3), heat = new Float32Array(N), alive = new Uint8Array(N);
@@ -456,8 +516,8 @@ const AIR = (() => {
   pts.visible = false; scene.add(pts);
   function spawn(i) {
     const r = Math.random();
-    const p = r < 0.9 ? [40 + Math.random() * 112, 48 + Math.random() * 112, 26]            // alt fan çıkışı
-                      : [163, 60 + Math.random() * 80, 112 + Math.random() * 80];           // tabla arkası peteği
+    const p = r < 0.9 ? [40 + Math.random() * 112, 48 + Math.random() * 112, 26]            // bottom fan outlet
+                      : [163, 60 + Math.random() * 80, 112 + Math.random() * 80];           // tray backplate grille
     pos.set(p, i * 3); heat[i] = 0;
   }
   for (let i = 0; i < N; i++) { spawn(i); pos[i * 3 + 2] += Math.random() * 200; alive[i] = 1; }
@@ -465,9 +525,9 @@ const AIR = (() => {
   const v = [0, 0, 0];
   function vel(x, y, z) {
     let vx = 0, vy = 0, vz = 0;
-    if (x > 36 && x < 156 && y > 44 && y < 164) vz += 60 * Math.max(0.15, 1 - (z - 26) / 200);   // alt fan jeti
+    if (x > 36 && x < 156 && y > 44 && y < 164) vz += 60 * Math.max(0.15, 1 - (z - 26) / 200);   // bottom fan jet
     { const dx = 102 - x, dy = 100 - y, dz = 240 - z, d2 = dx * dx + dy * dy + dz * dz + 900, k = 9e4 / d2 / Math.sqrt(d2);
-      vx += dx * k; vy += dy * k; vz += dz * k + 6; }                                            // üst fan emişi
+      vx += dx * k; vy += dy * k; vz += dz * k + 6; }                                            // top fan suction
     for (const o of OBS) if (o.fan) {
       const f = o.fan;
       let dx = f.sink[0] - x, dy = f.sink[1] - y, dz = f.sink[2] - z, d2 = dx * dx + dy * dy + dz * dz + 400, k = 40 * f.k / d2 / Math.sqrt(d2);
@@ -495,7 +555,7 @@ const AIR = (() => {
       for (const o of OBS) {
         const b = o.b;
         if (!inside(b, x, y, z)) continue;
-        if (o.heat) heat[i] = Math.min(1, heat[i] + o.heat * dt * 3 / Math.max(0.5, flow));   // az hava = daha çok ısınır
+        if (o.heat) heat[i] = Math.min(1, heat[i] + o.heat * dt * 3 / Math.max(0.5, flow));   // less air = more heating
         const d = [x - b[0][0], b[0][1] - x, y - b[1][0], b[1][1] - y, z - b[2][0], b[2][1] - z];
         let m = 0; for (let k = 1; k < 6; k++) if (d[k] < d[m]) m = k;
         if (m === 0) x = b[0][0] - 0.5; else if (m === 1) x = b[0][1] + 0.5; else if (m === 2) y = b[1][0] - 0.5;
@@ -509,7 +569,7 @@ const AIR = (() => {
   }
   return { pts, step };
 })();
-// ---- Teknik ölçüler: önemli yerler için ölçü çizgileri + etiket (mm) ----
+// ---- Dimensions: dimension lines + labels (mm) for the important features ----
 const DIMS = (() => {
   const g = new THREE.Group(); g.visible = false; scene.add(g);
   const lineMat = new THREE.LineBasicMaterial({ color: 0xc0552a, depthTest: false, transparent: true });
@@ -521,7 +581,7 @@ const DIMS = (() => {
     const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(c), depthTest: false, transparent: true }));
     sp.scale.set(44, 11, 1); sp.position.copy(p); sp.renderOrder = 999; return sp;
   }
-  // dim(a, b, off): a→b ölçüsü, off kadar dışarı ötelenmiş; uzatma çizgileri + uçlarda tik
+  // dim(a, b, off): a→b dimension, offset outward by off; extension lines + ticks at the ends
   function dim(a, b, off, text) {
     a = new THREE.Vector3(...a); b = new THREE.Vector3(...b); off = new THREE.Vector3(...off);
     const a2 = a.clone().add(off), b2 = b.clone().add(off);
@@ -532,28 +592,29 @@ const DIMS = (() => {
     const l = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(pts), lineMat); l.renderOrder = 998; g.add(l);
     g.add(label(text || (a.distanceTo(b).toFixed(0) + " mm"), a2.clone().add(b2).multiplyScalar(0.5).add(off.clone().normalize().multiplyScalar(8))));
   }
-  // dış ölçüler
-  dim([-2.5, -2.5, -14.5], [174.5, -2.5, -14.5], [0, -40, 0], "177 genişlik");
-  dim([174.5, -2.5, -14.5], [174.5, 202.5, -14.5], [40, 0, 0], "205 derinlik");
-  dim([174.5, -2.5, -14.5], [174.5, -2.5, 261], [40, -40, 0], "275.5 yükseklik (ayakla)");
-  dim([-2.5, 202.5, 0], [-2.5, 202.5, 80], [-40, 30, 0], "80 gövde eki");
-  // değiştirilebilir paneller (plaka dış ölçüsü)
+  // outer dimensions
+  dim([-2.5, -2.5, -14.5], [174.5, -2.5, -14.5], [0, -40, 0], "177 width");
+  dim([174.5, -2.5, -14.5], [174.5, 202.5, -14.5], [40, 0, 0], "205 depth");
+  dim([174.5, -2.5, -14.5], [174.5, -2.5, 261], [40, -40, 0], "275.5 height (with feet)");
+  dim([-2.5, 202.5, 0], [-2.5, 202.5, 80], [-40, 30, 0], "80 body joint");
+  // swappable panels (outer plate size)
   dim([8, -2.5, 2], [164, -2.5, 2], [0, -20, 0], "156");
   dim([164, -2.5, 2], [164, -2.5, 74], [20, 0, 0], "72");
-  dim([164, -9, 88], [164, -9, 214.1], [20, 0, 0], "126.1 Steam plakası");
+  dim([164, -9, 88], [164, -9, 214.1], [20, 0, 0], "126.1 Steam plate");
   dim([8, -9, 88], [164, -9, 88], [0, -20, 0], "156");
-  dim([19, -9, 98.55], [153, -9, 98.55], [0, -20, 0], "134 mıknatıs aralığı");
-  dim([164, -2.5, 218], [164, -2.5, 250], [20, 0, 0], "32 şerit");
-  dim([40, -2.5, 234], [86, -2.5, 234], [0, -20, 0], "46 reset → güç");
-  // açıklıklar ve vida merkezleri
-  dim([14, -2.5, 7], [158, -2.5, 7], [0, -30, 0], "144 vida aralığı");
-  // fanlar
-  dim([42, 100, 261], [162, 100, 261], [0, 40, 0], "120 egzoz fanı");
-  dim([36, 104, -14.5], [156, 104, -14.5], [0, 40, 0], "120 giriş fanı");
-  // PSU ve GPU açıklığı (arka)
+  dim([19, -9, 98.55], [153, -9, 98.55], [0, -20, 0], "134 magnet pitch");
+  dim([164, -2.5, 218], [164, -2.5, 250], [20, 0, 0], "32 strip");
+  dim([40, -2.5, 234], [86, -2.5, 234], [0, -20, 0], "46 reset → power");
+  // screw centres: 6 mm from the plate edges on every removable part
+  dim([14, -2.5, 8], [158, -2.5, 8], [0, -30, 0], "144 screw pitch");
+  dim([8, -2.5, 8], [14, -2.5, 8], [0, -45, 0], "6 edge → screw");
+  // fans
+  dim([42, 100, 261], [162, 100, 261], [0, 40, 0], "120 exhaust fan");
+  dim([36, 104, -14.5], [156, 104, -14.5], [0, 40, 0], "120 intake fan");
+  // PSU and GPU opening (rear)
   dim([8, 202.5, 80], [94, 202.5, 80], [0, 30, 0], "86 PSU");
   dim([8, 202.5, 80], [8, 202.5, 230], [-30, 30, 0], "150 PSU");
-  dim([62, 202.5, 30.2], [170, 202.5, 30.2], [0, 30, 0], "108 GPU açıklığı");
+  dim([62, 202.5, 30.2], [170, 202.5, 30.2], [0, 30, 0], "108 GPU opening");
   return g;
 })();
 let dimOn = false;
@@ -570,16 +631,16 @@ document.getElementById("b-air").addEventListener("click", () => {
   document.getElementById("air-hint").hidden = !airOn;
   document.getElementById("air-flow").hidden = !airOn;
   AIR.pts.visible = airOn && +slider.value < 0.01;
-  if (airOn) { animateExplode(0); ["yan_alt", "yan_ust", "on_panel_alt", "on_panel_ust", "on_serit"].forEach(id => setVisible(id, false)); }
+  if (airOn) { animateExplode(0); ["side_lower", "side_upper", "front_lower", "faceplate", "strip"].forEach(id => setVisible(id, false)); }
   render();
 });
 (function loop(now) {
   controls.update();
   if (airOn) {
     const flow = +flowEl.value, dt = Math.min(0.05, (now - lastT) / 1000 || 0.016);
-    for (const id in rotors) {            // pervaneler: rpm × hava miktarı
+    for (const id in rotors) {            // rotors: rpm × air volume
       const r = rotors[id], d = r.userData.def;
-      r.rotateOnAxis(new THREE.Vector3(...d.axis), d.rpm / 60 * 2 * Math.PI * dt * flow * 0.08);   // görsel hız, gerçek rpm'in %8'i
+      r.rotateOnAxis(new THREE.Vector3(...d.axis), d.rpm / 60 * 2 * Math.PI * dt * flow * 0.08);   // visual speed, 8 % of the real rpm
     }
     AIR.pts.visible = +slider.value < 0.01;
     if (AIR.pts.visible) AIR.step(now, flow);
