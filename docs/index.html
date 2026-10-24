@@ -131,7 +131,7 @@ canvas { display: block; width: 100%; height: 100%; }
     <details class="sec">
       <summary><h2>Print and assembly</h2></summary>
       <dl class="kv">
-        <dt>Volume</dt><dd>788 cm³ · ≈ 840 g PETG + Steam plate (128 cm³, 20 % infill ≈ 80 g)</dd>
+        <dt>Volume</dt><dd>762 cm³ · ≈ 840 g PETG + Steam plate (102 cm³, 20 % infill ≈ 65 g)</dd>
         <dt>Walls</dt><dd>2.2 mm · lid 3 mm · corners R5</dd>
         <dt>Tallest part</dt><dd>upper body 178 mm (K1: 220 × 220 × 250)</dd>
         <dt>Body joint</dt><dd>Z = 80 · lip + 2 pegs + 4 M3 (front screws behind the plate)</dd>
@@ -156,7 +156,7 @@ canvas { display: block; width: 100%; height: 100%; }
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 <script>
 // Model coordinates in mm, Z up (same as FreeCAD). Explode directions follow the reverse of the assembly order.
-// Colors: body and covers matte anthracite PETG, side covers translucent, Steam plate walnut veneer,
+// Colors: body and covers matte anthracite PETG, side covers translucent, Steam plate mesh (walnut veneer optional),
 // lower panel black + LCD, strip anthracite; hardware close to its real colors.
 // Printed parts listed top to bottom as they sit in the case.
 const PARTS = [
@@ -165,9 +165,9 @@ const PARTS = [
   { id: "side_upper",  name: "Left side cover, upper",  vol: 65,  color: 0x3a3e45, explode: [-90, 0, 90], alpha: 0.5 },
   { id: "strip",       name: "Control strip 156×32",    vol: 7,   color: 0x2b2e33, explode: [0, -80, 150],
     variants: [{ k: "controls", label: "Power, reset, USB-C, 2×USB-A" }, { k: "plain", label: "Plain" }] },
-  { id: "faceplate",   name: "Steam Machine plate 156×126", vol: 128, color: 0xffffff, explode: [0, -80, 90],
-    variants: [{ k: "plain", label: "Wood (walnut)", wood: true }, { k: "plain", label: "Plain (paint / your own design)", color: 0x2b2e33 },
-               { k: "mesh", label: "Mesh", color: 0x2b2e33 }, { k: "screen", label: "Screen window", color: 0x2b2e33 }] },
+  { id: "faceplate",   name: "Steam Machine plate 156×126", vol: 102, color: 0x2b2e33, explode: [0, -80, 90],
+    variants: [{ k: "mesh", label: "Mesh" }, { k: "plain", label: "Wood (walnut)", wood: true },
+               { k: "plain", label: "Plain (paint / your own design)" }, { k: "screen", label: "Screen window" }] },
   { id: "body_lower",  name: "Lower body",              vol: 181, color: 0x2b2e33, explode: [0, 0, 0] },
   { id: "side_lower",  name: "Left side cover, lower (SSD)", vol: 35, color: 0x3a3e45, explode: [-90, 0, 0], alpha: 0.5 },
   { id: "front_lower", name: "Lower front panel 156×72", vol: 12, color: 0x1c1d20, explode: [0, -80, 0], gloss: true,

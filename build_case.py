@@ -547,7 +547,7 @@ def build(doc_name="MiniPCCase"):
                  foot=(foot(), (0.5, 0.5, 0.55)),
                  psu_support=(psu_support(), (0.5, 0.5, 0.55)),
                  front_lower=(front_panel("front_lower", "screen"), (0.15, 0.15, 0.17)),   # 3.5" LCD window
-                 faceplate=(front_panel("faceplate", "plain"), (0.45, 0.25, 0.12)),        # plain: wood veneer / paint
+                 faceplate=(front_panel("faceplate", "mesh"), (0.2, 0.2, 0.22)),           # default mesh; plain variant for veneer / paint
                  strip=(front_panel("strip", "controls"), (0.2, 0.2, 0.22)))
     parts.update(references())
     for name, (shape, color) in parts.items():
@@ -591,7 +591,7 @@ def export_stl(out_dir="/Users/cobanov/Developer/mini-pc-case/stl", doc_name="Mi
     doc = App.getDocument(doc_name)
     shapes = {n: doc.getObject(n).Shape for n in PRINTED}
     shapes["test_piece"] = test_piece(doc)
-    for key, kinds in (("front_lower", ("plain", "mesh")), ("faceplate", ("mesh", "screen")), ("strip", ("plain",))):
+    for key, kinds in (("front_lower", ("plain", "mesh")), ("faceplate", ("plain", "screen")), ("strip", ("plain",))):
         for k in kinds:
             shapes[f"{key}_{k}"] = front_panel(key, k)
     for n, sh in shapes.items():

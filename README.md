@@ -55,7 +55,7 @@ Other mATX boards following the ATX 2.2 hole pattern should fit; check `GPU_TAB_
 PETG, 0.2 mm layers, 3 perimeters, 20 % gyroid, no supports. Walls are 2.2 mm, lid 3 mm, outer corners R5.
 Print the body halves upright (skirt or mouse-ear brims, the footprint leaves ~3 mm to the bed edge), lid and
 panels face down. Wide openings carry thin breakaway ribs instead of supports; snap them off after printing.
-Total ≈ 660 cm³ (~840 g) plus the Steam plate (128 cm³, ~80 g at 20 % infill).
+Total ≈ 660 cm³ (~840 g) plus the Steam plate (102 cm³ mesh, ~65 g at 20 % infill).
 
 ## Licence
 

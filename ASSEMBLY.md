@@ -13,7 +13,7 @@ tabs +11 mm), ~9.7 L. Body split in two at Z = 80 mm; tallest part 178 mm.
 | `foot` × 4 | Ø22 × 12 mm, M3 into the floor | 12 mm |
 | `psu_support` | removable PSU support: two columns + rail, 2 × M3 into floor bosses; the floor carries a 0.8 mm outline of its footprint | 24 mm (on its side) |
 | `front_lower` (+ `_plain`, `_mesh`) | lower front panel 156 × 72: default 3.5" LCD window 75 × 46 (module 85 × 55 × 5 behind it), plain, mesh | 3 mm |
-| `faceplate` (+ `_mesh`, `_screen`) | **Steam Machine faceplate** 156 × 126.1 × 6.5 with 4 magnets: default plain (for veneer/paint), mesh, screen. Valve's and third-party plates fit too | 6.5 mm |
+| `faceplate` (+ `_plain`, `_screen`) | **Steam Machine faceplate** 156 × 126.1 × 6.5 with 4 magnets: default mesh; plain (for veneer/paint), screen. Valve's and third-party plates fit too | 6.5 mm |
 | `strip` (+ `_plain`) | control strip 156 × 32 above the Steam plate: MX power in the centre, MX reset + USB-C left, 2 × USB-A right (panel-mount extensions) | 3 mm |
 | `side_lower`, `side_upper` | left side covers; the lower one is closed and carries the SSD bed on its inside (4 screws, 1.5 mm spacers) | 2.2 mm |
 | `test_piece` | rear-right corner: I/O opening, GPU opening + shelf, two standoffs | 133 mm |
@@ -53,8 +53,8 @@ extensions (cutouts 9.6 × 3.9 and 13.6 × 6.4; drill the flange holes to match 
 2 × 120 × 25 mm Molex fans (intake in the floor, exhaust in the lid: chimney layout; the fans' own screws, Ø4.5 holes,
 105 mm pitch). Molex means no motherboard header is needed.
 
-Walls 2.2 mm (3 perimeters), lid 3 mm; total 788 cm³: 660 cm³ without the Steam plate ≈ 840 g PETG, plate at 20 %
-infill ≈ 80 g → everything fits on one 1 kg spool (with a small margin).
+Walls 2.2 mm (3 perimeters), lid 3 mm; total 762 cm³: 660 cm³ without the Steam plate ≈ 840 g PETG, mesh plate at 20 %
+infill ≈ 65 g → everything fits on one 1 kg spool (with a small margin).
 For a wood look glue 0.6 mm walnut veneer onto the plain plate, or print the plate in wood-filled PLA.
 PSU 150 × 86 × 140 (the user's PSU is 149.7 × 86.4 × 140); on its rear face the socket is bottom centre, the switch
 left of it, the grille above; cables leave at the front bottom. Outer corners R5, top/bottom edges chamfered 1.5 mm.
