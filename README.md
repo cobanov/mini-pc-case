@@ -7,7 +7,9 @@ spool of PETG.
 **Live viewer:** https://pccase.cobanov.dev — rotate, explode, airflow animation, dimensions, swap the
 front panels, recolor the parts, and toggle a Steam Machine and an iPhone 18 Pro Max next to it for scale.
 
-![case](docs/preview.png)
+![The case on a desk](docs/render-01-hero.png)
+
+<p><img src="docs/render-02-front.png" width="32%" alt="Front"> <img src="docs/render-03-rear.png" width="32%" alt="Rear and left side"> <img src="docs/render-04-bone.png" width="32%" alt="Bone and black palette"></p>
 
 ## Highlights
 
@@ -51,6 +53,7 @@ Other mATX boards following the ATX 2.2 hole pattern should fit; check `GPU_TAB_
 | `ASSEMBLY.md` | Bill of materials (inserts, screws, magnets), print settings, joint details, assembly order and the specs for designing your own panels. |
 | `NOTES.md` | Dimension sources: ATX 2.2, ATX12V PSDG, board manual. |
 | `docs/` | The web viewer (three.js), served at pccase.cobanov.dev. |
+| `render/render_case.py` | Blender (Cycles) scene for the README renders, built from the viewer meshes: `blender -b -P render/render_case.py` (`PREVIEW=1` for a quick pass). HDRI and oak texture are CC0 from Poly Haven, in `render/assets/`. |
 
 ## Printing
 
