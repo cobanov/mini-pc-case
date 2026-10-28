@@ -9,3 +9,6 @@ __pycache__/
 !.dev.vars.example
 .env*
 !.env.example
+
+# slicer output: printer-specific and regenerable from stl/ + gcode/profiles/
+gcode/*.gcode

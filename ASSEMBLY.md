@@ -120,8 +120,9 @@ Screwed panels carry Ø8 × 2 mm pads at the screw corners for the countersunk h
 | `side_upper` | inner face on the bed | tongue and overlap rest on the bed |
 | `test_piece` | upright | **print this first** |
 
-Settings: PETG, 0.2 mm layers, 3 perimeters, 20 % gyroid, no supports. Snap off the thin breakaway ribs in the I/O,
-GPU and socket openings with pliers after printing and sand the edge.
+Settings: PETG, 0.2 mm layers, 3 perimeters, 20 % gyroid, no supports. Snap off the breakaway ribs in the I/O,
+GPU and socket openings with pliers after printing and sand the edge. Rungs tie the ribs of each opening into one
+grid: break each rib at its foot and the grid comes out in one piece.
 
 ## Assembly order
 

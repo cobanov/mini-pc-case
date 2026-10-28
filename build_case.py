@@ -190,13 +190,18 @@ def countersink(x, y, z, d, depth=T):
     cone = Part.makeCone(3.3, 1.7, 1.6, V(x, y, z) - V(*d) * 0.01, V(*d))
     return [hole, cone]
 
-def breakaway_ribs(x0, x1, y0, y1, z0, z1, t=0.8, gap=0.2):
+def breakaway_ribs(x0, x1, y0, y1, z0, z1, t=1.2, gap=0.2, rung=20.0):
     # thin vertical ribs so the top edge of a wide opening in an upright wall is not a bridge;
-    # 0.2 mm gap at the top (like a support interface), snapped off with pliers after printing
+    # 0.2 mm gap at the top (like a support interface), snapped off with pliers after printing.
+    # Rungs every `rung` mm tie them into one grid: lone 0.8 x 0.95 ribs 48 mm tall were knocked over by the nozzle.
     n = math.ceil((x1 - x0) / MAX_BRIDGE) - 1
-    step = (x1 - x0) / (n + 1)
-    return [box(x0 + step * i - t / 2, x0 + step * i + t / 2, y0, y1, z0, z1 - gap)
-            for i in range(1, n + 1)]
+    xs = [x0 + (x1 - x0) / (n + 1) * i for i in range(1, n + 1)]
+    out = [box(x - t / 2, x + t / 2, y0, y1, z0, z1 - gap) for x in xs]
+    z = z0 + rung
+    while z + t < z1 - gap - 5:   # rungs stay clear of the top edge
+        out += [box(a, b, y0, y1, z, z + t) for a, b in zip(xs, xs[1:])]
+        z += rung
+    return out
 
 def fan_cut(cu, cv, to3d, ext):
     # fan grille (hex pattern inside a circle) + 4 screw holes; to3d(u, v) gives the point on the surface
@@ -302,13 +307,13 @@ def body(front="faceplate"):
                         4.5, lambda u, v: V(W - 1, u, v), V(T + 2, 0, 0))
     s = cut_all(s, cuts)
     # breakaway supports: top edges of the I/O, GPU and socket openings
-    ribs = breakaway_ribs(io[0], io[1], D, D + 1.2, io[2], io[3])
+    # ribs span the full wall even where it is thinned (I/O pocket, panel recess): 2.2 mm deep ribs held, 0.95 mm ones did not
+    ribs = breakaway_ribs(io[0], io[1], D, D + T, io[2], io[3])
     ribs += breakaway_ribs(X_TAB + 10.5, W - 2, D, D + T, Z_C - 44, Z_C + 4)
     ribs += breakaway_ribs(PSU_X0 + 26, PSU_X0 + 76, D, D + T, PSU_Z0 + 6, PSU_Z0 + 36)
     for key in filter(active, PANELS):
         op = PANELS[key]["open"]
-        y0 = -T + 1.25 if PANELS[key]["screws"] else -T   # no recess (Steam plate): ribs span the full wall
-        ribs += breakaway_ribs(op[0], op[1], y0, 0, op[2], op[3])
+        ribs += breakaway_ribs(op[0], op[1], -T, 0, op[2], op[3])
     global RIBS
     RIBS = Part.makeCompound(ribs)   # ignored by the clash check (snapped off after printing)
     for r in ribs:
