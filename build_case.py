@@ -633,7 +633,7 @@ def test_piece(doc):
     # Mount the board with 2 screws to try the I/O shield and the GPU bracket.
     return FULL.common(box(X_TAB - 5, W + T, D - 22, D + T + 11, -T, 130))
 
-def export_stl(out_dir="/Users/cobanov/Developer/mini-pc-case/stl", doc_name="MiniPCCase"):
+def export_stl(out_dir="/Users/cobanov/Workspace/3d-projects/mini-pc-case/stl", doc_name="MiniPCCase"):
     import os
     import MeshPart
     os.makedirs(out_dir, exist_ok=True)
