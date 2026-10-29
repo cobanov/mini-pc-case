@@ -1,19 +1,19 @@
 {
  "type": "filament",
- "name": "Case PETG @K1",
+ "name": "PETG @K1 cobanov",
  "from": "User",
  "instantiation": "true",
  "cool_plate_temp": [
-  "75"
+  "80"
  ],
  "eng_plate_temp": [
-  "75"
+  "80"
  ],
  "hot_plate_temp": [
-  "75"
+  "80"
  ],
  "textured_plate_temp": [
-  "75"
+  "80"
  ],
  "cool_plate_temp_initial_layer": [
   "80"
@@ -43,7 +43,7 @@
   "; filament end gcode \n"
  ],
  "filament_flow_ratio": [
-  "0.95"
+  "0.97"
  ],
  "reduce_fan_stop_start_freq": [
   "0"
@@ -55,7 +55,7 @@
   "30"
  ],
  "filament_density": [
-  "1.27"
+  "1.23"
  ],
  "filament_deretraction_speed": [
   "nil"
@@ -79,7 +79,7 @@
   "nil"
  ],
  "filament_retraction_length": [
-  "nil"
+  "1.5"
  ],
  "filament_z_hop": [
   "nil"
@@ -141,13 +141,13 @@
  "temperature_vitrification": [
   "80"
  ],
- "inherits": "",
  "nozzle_temperature_range_low": [
   "220"
  ],
  "nozzle_temperature_range_high": [
   "270"
  ],
+ "setting_id": "zk1Typ98hZMZLn68",
  "filament_id": "GFG99",
  "compatible_printers": [
   "Creality K1C 0.4 nozzle",
@@ -155,16 +155,21 @@
   "Creality K1C 0.8 nozzle",
   "Creality K1 SE 0.4 nozzle"
  ],
+ "version": "02.03.02.75",
  "supertack_plate_temp_initial_layer": [
   "80"
  ],
  "supertack_plate_temp": [
-  "75"
+  "80"
  ],
  "textured_cool_plate_temp_initial_layer": [
   "80"
  ],
  "textured_cool_plate_temp": [
-  "75"
- ]
+  "80"
+ ],
+ "additional_cooling_fan_speed": [
+  "0"
+ ],
+ "inherits": ""
 }

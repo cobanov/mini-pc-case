@@ -18,6 +18,7 @@ CORNER_R = 5.0     # vertical outer corner radius (fine in upright prints)
 FIT = 0.4          # clearance between mating parts (0.3 + 0.1 for PETG)
 TOL = 0.3          # allowance for holes shrinking in print
 MAX_BRIDGE = 18.0  # unsupported bridge limit; wider openings get breakaway ribs
+MAX_CANTILEVER = 3.0   # a flat overhang held by one edge only; deeper ones get a 45° underside
 
 # Fasteners — all M3, one insert type
 INSERT_D, INSERT_L = 4.0, 6.0   # pocket for M3 x 5 x 4.5 brass heat-set insert
@@ -154,6 +155,13 @@ def teardrop_x(y, z, r, x0, x1):
     s.rotate(V(x0, y, z), V(1, 0, 0), 225)
     return c.fuse(s)
 
+def teardrop_y(x, z, r, y0, y1):
+    # boss along Y with a 45° underside (panel bosses on the inside of the upright front wall)
+    c = cyl(r, y1 - y0, (x, y0, z), (0, 1, 0))
+    s = Part.makeBox(r, y1 - y0, r, V(x, y0, z))
+    s.rotate(V(x, y0, z), V(0, 1, 0), 135)
+    return c.fuse(s)
+
 def hex_centers(u0, u1, v0, v1, r, web=2.2, inside=None):
     # grid centred on the area and mirror-symmetric on both axes: odd number of rows, middle row full
     du = r * math.sqrt(3) + web
@@ -252,9 +260,13 @@ def body(front="faceplate"):
         s = s.fuse(cyl(5, 6, (x, y, 0), (0, 0, 1)))
     for key in filter(active, PANELS):                         # front panel bosses (inside of the front wall)
         for x, z in PANELS[key]["screws"]:
-            s = s.fuse(cyl(4.5, 7.5, (x, 0, z), (0, 1, 0)))
-        for x, z in PANELS[key].get("magnets", []):            # magnet blocks (inside of the front wall)
-            s = s.fuse(box(x - MAGNET[0] / 2 - 2, x + MAGNET[0] / 2 + 2, 0, 7.5, z - MAGNET[1] / 2 - 2, z + MAGNET[1] / 2 + 2))
+            s = s.fuse(teardrop_y(x, z, 4.5, 0, 7.5))
+        for x, z in PANELS[key].get("magnets", []):            # magnet blocks (inside of the front wall), 45° underside
+            z0, z1 = z - MAGNET[1] / 2 - 2, z + MAGNET[1] / 2 + 2
+            zb = max(z0 - 7.5, Z_JOINT + 6 + FIT)              # the slope stops FIT above the lower body's front lip
+            prof = [(0, z1), (0, zb)] + ([(zb - z0 + 7.5, zb)] if zb > z0 - 7.5 else []) + [(7.5, z0), (7.5, z1), (0, z1)]
+            blk = Part.Face(Part.makePolygon([V(0, y, zz) for y, zz in prof])).extrude(V(MAGNET[0] + 4, 0, 0))
+            s = s.fuse(blk.translated(V(x - MAGNET[0] / 2 - 2, 0, 0)))
 
     cuts = []
     for dy, dz in HOLES:
@@ -263,6 +275,8 @@ def body(front="faceplate"):
     cuts.append(box(io[0], io[1], D - 1, D + T + 1, io[2], io[3]))
     # 1.2 mm wall around the opening for the I/O shield springs (pocket from outside)
     # no thinning at the bottom edge: the 3.2 mm strip to the GPU opening stays full thickness
+    # shortcut: the 3.8 mm strip between the opening and the tray wall is thinned too and flexes (printed 2026-10-29, held by the board screws);
+    # on a reprint stop the pocket at io[1] and fillet the inner rear-right corner (R2.8) so the R5 outer corner keeps 2.2 mm
     cuts.append(box(io[0] - 2.5, io[1] + 2.5, D + 1.2, D + T + 1, io[2], io[3] + 2.5))
     # GPU opening + slot for the bracket tab + screw pockets
     cuts.append(box(X_TAB + 10.5, W - 2, D - 1, D + T + 1, Z_C - 44, Z_C + 4))
@@ -697,8 +711,9 @@ def check_fasteners(doc_name="MiniPCCase"):
 def check_print(doc_name="MiniPCCase", step=0.25):
     # Scans, in print orientation, the underside of every downward-facing (within 45°) flat face that is not on
     # the bed, along its long axis. A point is supported if there is material below the face's centre line or just
-    # outside its long edges (overhang from an edge / rib). The longest unsupported run = unsupported bridge
-    # length; anything over MAX_BRIDGE is listed.
+    # outside its long edges (overhang from an edge / rib); one edge alone holds only MAX_CANTILEVER of depth.
+    # The longest unsupported run = unsupported bridge length; anything over MAX_BRIDGE is listed. Then the
+    # round undersides: a horizontal boss or pin whose bottom line starts in the air (teardrops have none).
     doc = App.getDocument(doc_name)
     for n, rot in PRINT_ORIENT.items():
         if doc.getObject(n) is None:   # panel variants are only built on export
@@ -720,18 +735,41 @@ def check_print(doc_name="MiniPCCase", step=0.25):
             s0, s1 = (bb.YMin, bb.YMax) if along_x else (bb.XMin, bb.XMax)
             pt = (lambda a, b, z: V(a, b, z)) if along_x else (lambda a, b, z: V(b, a, z))
             z = bb.ZMin
+            wide = s1 - s0
             run = longest = 0.0
             t = a0 + step / 2
             while t < a1:
                 if f.isInside(pt(t, (s0 + s1) / 2, z), 0.05, True):
-                    held = any(sh.isInside(pt(t, c, z - 0.35), 0.01, True)
-                               for c in ((s0 + s1) / 2, s0 - 0.3, s1 + 0.3))
+                    mid, e0, e1 = (sh.isInside(pt(t, c, z - 0.35), 0.01, True) for c in ((s0 + s1) / 2, s0 - 0.3, s1 + 0.3))
+                    held = mid or (e0 and e1 and wide <= MAX_BRIDGE) or ((e0 or e1) and wide <= MAX_CANTILEVER)
                     run = 0.0 if held else run + step
                     longest = max(longest, run)
                 t += step
             if longest > MAX_BRIDGE:
                 c = bb.Center
                 bad.append(dict(length=round(longest), z=round(z - bed), x=round(c.x), y=round(c.y)))
+        loc = doc.getObject(n).Shape   # round check in part coordinates, with the print's "down" brought in
+        down = App.Rotation(rot[0], rot[1]).inverted().multVec(V(0, 0, -1)) if rot else V(0, 0, -1)
+        bed_l = min(-v.Point.dot(down) for v in loc.Vertexes)
+        for f in loc.Faces:
+            cy = f.Surface
+            if cy.TypeId != "Part::GeomCylinder" or cy.Radius < 2 or abs(cy.Axis.dot(down)) > 0.1:
+                continue
+            dn = down - cy.Axis * cy.Axis.dot(down)
+            dn.normalize()
+            v0, v1 = f.ParameterRange[2:]
+            run = longest = 0.0
+            t = v0 + step / 2
+            while t < v1:
+                c = cy.Center + cy.Axis * t
+                q = c + dn * cy.Radius   # bottom line; convex only (axis inside material), holes skipped
+                if f.isInside(q, 0.05, True) and -q.dot(down) > bed_l + 0.3 and loc.isInside(c, 0.01, True):
+                    run = 0.0 if loc.isInside(q + dn * 0.35, 0.01, True) else run + step
+                    longest = max(longest, run)
+                t += step
+            if longest > MAX_CANTILEVER:
+                c = f.BoundBox.Center
+                bad.append(dict(round_underside=round(longest, 1), r=round(cy.Radius, 1), x=round(c.x), y=round(c.y), z=round(c.z)))
         print(f"{n}: {'no long bridges or overhangs' if not bad else bad}")
 
 build()

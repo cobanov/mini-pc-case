@@ -110,8 +110,8 @@ Screwed panels carry Ø8 × 2 mm pads at the screw corners for the countersunk h
 | Part | Orientation (STL is already oriented) | Note |
 |---|---|---|
 | `body_lower` | upright, floor on the bed | 215 mm deep: fits the K1 bed with 2.5 mm to spare, mouse-ear brims at the corners instead of a brim |
-| `body_upper` | upright, joint face (the Z = 80 ring) on the bed | brim; 178 mm |
-| `lid` | flat face on the bed | |
+| `body_upper` | upright, joint face (the Z = 80 ring) on the bed | 178 mm tall on 17 cm² of wall: 8 mm brim inside and out, welded to the part (0 gap), no skirt (it would run off the bed). Trim the inner brim flush at the front and right, where the lower body's lip enters |
+| `lid` | flat face on the bed | 8 mm brim, 0 gap |
 | `foot` | flat face on the bed, 4 pieces | |
 | `psu_support` | on its side | |
 | `front_lower*`, `faceplate*` | outer face on the bed | snap off the breakaway ribs in the case's panel openings |
@@ -120,7 +120,9 @@ Screwed panels carry Ø8 × 2 mm pads at the screw corners for the countersunk h
 | `side_upper` | inner face on the bed | tongue and overlap rest on the bed |
 | `test_piece` | upright | **print this first** |
 
-Settings: PETG, 0.2 mm layers, 3 perimeters, 20 % gyroid, no supports. Snap off the breakaway ribs in the I/O,
+Settings: PETG at 250 °C, bed 80 °C on every layer (a cover lifted a corner when the bed dropped to 75), 0.2 mm
+layers, 3 perimeters, 20 % gyroid, no supports. `slice_k1.sh` slices everything for a Creality K1 from the
+profiles in `gcode/profiles/`. Snap off the breakaway ribs in the I/O,
 GPU and socket openings with pliers after printing and sand the edge. Rungs tie the ribs of each opening into one
 grid: break each rib at its foot and the grid comes out in one piece.
 

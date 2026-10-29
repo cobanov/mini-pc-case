@@ -50,6 +50,7 @@ Other mATX boards following the ATX 2.2 hole pattern should fit; check `GPU_TAB_
 |---|---|
 | `build_case.py` | The whole design. Run inside FreeCAD (`exec(open("build_case.py").read())`) or headless with `freecadcmd`. All dimensions are parameters at the top. |
 | `stl/` | Print-ready STLs in print orientation, plus STEP files in assembly coordinates. Includes the panel variants and a small test piece for the I/O and GPU openings. |
+| `slice_k1.sh`, `gcode/profiles/` | OrcaSlicer CLI slicing for a Creality K1 with complete (inherits-resolved) PETG and PLA profiles; each G-code is checked against them. `./slice_k1.sh 06 07` slices only those parts. |
 | `ASSEMBLY.md` | Bill of materials (inserts, screws, magnets), print settings, joint details, assembly order and the specs for designing your own panels. |
 | `NOTES.md` | Dimension sources: ATX 2.2, ATX12V PSDG, board manual. |
 | `docs/` | The web viewer (three.js), served at pccase.cobanov.dev. |
@@ -58,7 +59,7 @@ Other mATX boards following the ATX 2.2 hole pattern should fit; check `GPU_TAB_
 ## Printing
 
 PETG, 0.2 mm layers, 3 perimeters, 20 % gyroid, no supports. Walls are 2.2 mm, lid 3 mm, outer corners R5.
-Print the body halves upright (skirt or mouse-ear brims, the footprint leaves ~3 mm to the bed edge), lid and
+Print the body halves upright (brims welded to the wall, no skirt: the footprint leaves ~2 mm to the bed edge), lid and
 panels face down. Wide openings carry breakaway rib grids instead of supports; snap them off after printing.
 Total ≈ 663 cm³ (~845 g) plus the Steam plate (103 cm³ mesh, ~65 g at 20 % infill).
 
